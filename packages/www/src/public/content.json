@@ -32,7 +32,7 @@
   {
     "id": "/api-reference#server-apis",
     "title": "Server APIs",
-    "text": "renderInAction\nrenderToReadableStream\nrenderToString\ngetServeOptions\nfileSystemRouter\nRenderInitator\nserve\nSSRWebComponent\nNode.js APIs\n\nserve\nhandler",
+    "text": "renderInAction\nrenderToReadableStream\nrenderToString\ngetServeOptions\nfileSystemRouter\nInitator\nserve\nSSRWebComponent\nNode.js APIs\n\nserve\nhandler",
     "titles": [
       "API Reference"
     ]
@@ -1094,7 +1094,7 @@
   {
     "id": "/api-reference/functions/navigate#navigateroute-string-options-rendermode-transition-or-reactivity-or-native-never",
     "title": "navigate(route: string, options?: { renderMode?: 'transition' | 'reactivity' | 'native' }): never",
-    "text": "The navigate function is used for imperative navigation. import { navigate } from \"brisa\";\n\n// ...\nnavigate(\"/some-page\"); The navigate function can be used both on the client and on the server. Although there are some differences to be taken into account: If the navigation is done before sending the response (in the middleware, responseHeaders or an API endpoint for example), instead of modifying the navigation history it does a 301 redirect.\nIf it is done during rendering, a soft redirect is made.\nIf used inside a client-event or a server-event (action) a new page is always generated in the navigation history. All i18n navigaton rules apply equally in this function.",
+    "text": "The navigate function is used for imperative navigation. import { navigate } from \"brisa\";\n\n// ...\nnavigate(\"/some-page\"); The navigate function can be used both on the client and on the server. Although there are some differences to be taken into account: If the navigation is done before sending the response (in the middleware, responseHeaders or an API endpoint for example), instead of modifying the navigation history it does a 301 redirect.\nIf it is done during rendering, SPA navigation or Server Action a soft redirect is made.\nIf used inside a client-event or a server-event (action) a new page is always generated in the navigation history. All i18n navigaton rules apply equally in this function.",
     "titles": [
       "navigate",
       "Reference"
@@ -1500,7 +1500,7 @@
   {
     "id": "/api-reference/server-apis/Initiator#example-usage",
     "title": "Example usage:",
-    "text": "In the next example, we use Initiator to determine if the render was initiated by a server action. import { Initiator } from \"brisa\";\n\nexport default function MyComponent(props, { initiator }) {\n  const isAnAction = renderInitiator === Initiator.SERVER_ACTION;\n  return (\n    <div>\n      {isAnAction\n        ? \"This is a rerender from an action\"\n        : \"Another type of render\"}\n    </div>\n  );\n}",
+    "text": "In the next example, we use Initiator to determine if the render was initiated by a server action. import { Initiator } from \"brisa\";\n\nexport default function MyComponent(props, { initiator }) {\n  const isAnAction = initiator === Initiator.SERVER_ACTION;\n  return (\n    <div>\n      {isAnAction\n        ? \"This is a rerender from an action\"\n        : \"Another type of render\"}\n    </div>\n  );\n}",
     "titles": [
       "Initiator"
     ]
@@ -4789,7 +4789,7 @@
   {
     "id": "/building-your-application/routing/linking-and-navigating#signals-depending-on-external-dom-elements",
     "title": "Signals depending on external DOM elements",
-    "text": "Navigation with HTML streaming is very powerful because it allows you to see changes on the page immediately, but keep in mind that a web component can be mounted when the diffing part is not yet finished and it still needs to render the rest of DOM elements. That said, if a web component uses document.querySelectorAll() to get external elements from the DOM, you have to update them after navigation. To do this, you can use: window.navigation.addEventListener('navigatesuccess', updateDOMElements);\ncleanup(() => window.navigation.removeEventListener('navigatesuccess', updateDOMElements)); This event is part of the Web Platform, not Brisa, more documentation at MDN.",
+    "text": "Navigation with HTML streaming is very powerful because it allows you to see changes on the page immediately, but keep in mind that a web component can be mounted when the diffing part is not yet finished and it still needs to render the rest of DOM elements. That said, if a web component uses document.querySelectorAll() to get external elements from the DOM, you have to update them after navigation. To do this, you can use: window.navigation.addEventListener(\"navigatesuccess\", updateDOMElements);\ncleanup(() =>\n  window.navigation.removeEventListener(\"navigatesuccess\", updateDOMElements),\n); This event is part of the Web Platform, not Brisa, more documentation at MDN.",
     "titles": [
       "Linking and Navigating",
       "Navigation with reactivity"
@@ -4839,7 +4839,7 @@
   {
     "id": "/building-your-application/routing/linking-and-navigating#navigate-function",
     "title": "navigate function",
-    "text": "The navigate function is used for imperative navigation. import { navigate } from \"brisa\";\n\n// ...\nnavigate(\"/some-page\"); The navigate function can be used both on the client and on the server. Although there are some differences to be taken into account: If the navigation is done before sending the response (in the middleware, responseHeaders or an API endpoint for example), instead of modifying the navigation history it does a 301 redirect.\nIf it is done during rendering, a soft redirect is made.\nIf used inside a client-event or a server-event (action) a new page is always generated in the navigation history. All i18n navigaton rules apply equally in this function. navigate('/some') does not require you to use return navigate('/some') due to using the TypeScript never type.",
+    "text": "The navigate function is used for imperative navigation. import { navigate } from \"brisa\";\n\n// ...\nnavigate(\"/some-page\"); The navigate function can be used both on the client and on the server. Although there are some differences to be taken into account: If the navigation is done before sending the response (in the middleware, responseHeaders or an API endpoint for example), instead of modifying the navigation history it does a 301 redirect.\nIf it is done during rendering, SPA navigation or Server Action a soft redirect is made.\nIf used inside a client-event or a server-event (action) a new page is always generated in the navigation history. All i18n navigaton rules apply equally in this function. navigate('/some') does not require you to use return navigate('/some') due to using the TypeScript never type.",
     "titles": [
       "Linking and Navigating"
     ]
@@ -4888,6 +4888,22 @@
     "id": "/building-your-application/routing/middleware#example",
     "title": "Example",
     "text": "// middleware.ts\nimport { type RequestContext } from \"brisa\";\n\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({\n  i18n,\n  route,\n  headers,\n}: RequestContext): Response | undefined {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRoute && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n}\n\n\n\n// middleware.js\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({ i18n, route, headers }) {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRout && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n} Only is possible to access to route property inside api routes and pages routes. This is to support handling of dynamic routes, catch-all, etc in a simple way. In the case of assets you can look it up through the request: import { type RequestContext } from \"brisa\";\n\nexport default async function middleware(\n  request: RequestContext,\n): Response | undefined {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n}\n\n\n\nexport default async function middleware(request) {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n} However, this is not the best way to serve assets. You can put the static files directly inside the public folder. More information here.",
+    "titles": [
+      "Middleware"
+    ]
+  },
+  {
+    "id": "/building-your-application/routing/middleware#redirect",
+    "title": "Redirect",
+    "text": "You can redirect the user to another page by returning a Response object with a 302 status code and a Location header. export default async function middleware(request) {\n  if (request.url.pathname === \"/old\") {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: \"/new\",\n      },\n    });\n  }\n} When the user visits /old, they will be redirected to /new.",
+    "titles": [
+      "Middleware"
+    ]
+  },
+  {
+    "id": "/building-your-application/routing/middleware#rewrite",
+    "title": "Rewrite",
+    "text": "You can rewrite the request by modifying the finalURL of the Request object. export default async function middleware(request) {\n  if (request.url.pathname === \"/old\") {\n    // Rewrite: /old -> /new\n    request.finalURL = new URL(\"/new\", request.finalURL).toString();\n    // Continue processing the request\n    return;\n  }\n\n  // ... Manage other routes\n} When the user visits /old, the request will be rewritten to /new. If after the rewrite you return a Response object, the rewrite will be ignored. So, if you want to rewrite properly, you should ensure to continue processing the request by returning nothing.\n// ❌ Rewrite is ignored\nrequest.finalURL = new URL(\"/new\", request.finalURL).toString();\n// ✅ Response is processed\nreturn new Response(\"Hello World!\");",
     "titles": [
       "Middleware"
     ]
