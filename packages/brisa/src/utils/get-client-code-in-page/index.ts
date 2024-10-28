@@ -142,7 +142,6 @@ export async function transformToWebComponents({
     BUILD_DIR,
     CONFIG,
     I18N_CONFIG,
-    LOG_PREFIX,
     IS_DEVELOPMENT,
     IS_PRODUCTION,
     VERSION_HASH,
@@ -228,9 +227,8 @@ export async function transformToWebComponents({
   const { success, logs, outputs } = await Bun.build({
     entrypoints: [webEntrypoint],
     root: SRC_DIR,
-    // TODO: format: "iife" when Bun support it
-    // https://bun.sh/docs/bundler#format
     target: 'browser',
+    format: 'iife',
     minify: IS_PRODUCTION,
     external: CONFIG.external,
     define: {
@@ -304,7 +302,7 @@ export async function transformToWebComponents({
   }
 
   return {
-    code: '(() => {' + (await outputs[0].text()) + '})();',
+    code: await outputs[0].text(),
     size: outputs[0].size,
     useI18n,
     i18nKeys,
