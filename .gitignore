@@ -21,7 +21,7 @@ packages/brisa/build
 packages/brisa/test
 
 # Docs
-#mydb.sqlite
+mydb.sqlite
 examples/**/bun.lockb
 
 tsconfig.tsbuildinfo
