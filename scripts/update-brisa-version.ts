@@ -43,12 +43,13 @@ const version = prompt(
   `Introduce the new version of Brisa (now ${currentVersion}): `,
 );
 
-if (
+const isIncorrectVersion =
   !version ||
   currentVersion === version ||
   !Bun.semver.satisfies(version, '>= 0.0.0') ||
-  [currentVersion, version].sort(Bun.semver.order)[0] !== currentVersion
-) {
+  [currentVersion, version].sort(Bun.semver.order)[0] !== currentVersion;
+
+if (isIncorrectVersion && !version?.includes('canary')) {
   console.error('Invalid version, must be greater than the current one.');
   process.exit(1);
 }
