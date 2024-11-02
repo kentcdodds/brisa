@@ -36,7 +36,7 @@
     "release-adapter-vercel:canary": "bun run --cwd packages/adapter-vercel build && npm publish --workspace=packages/adapter-vercel --tag next --access public",
     "test": "bun test packages/*",
     "test:e2e": "bun test ./e2e/examples.test.ts",
-    "test:node": "node --test packages/**/*.node-test.js",
+    "test:node": "find packages -name '*.node-test.js' -exec node --test {} +",
     "test:coverage": "bun run --cwd packages/brisa --coverage",
     "tsc:check": "bun run --cwd packages/brisa tsc:check",
     "update-version": "bun run scripts/update-brisa-version.ts",
