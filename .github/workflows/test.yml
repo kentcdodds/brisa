@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.bun
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -33,14 +43,6 @@ jobs:
           bun run build
           bun run create-brisa:build
 
-      - name: Save node_modules and build output
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: |
-            node_modules
-            packages
-
   bun-tests:
     needs: setup
     runs-on: ${{ matrix.os }}
@@ -51,10 +53,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore node_modules and build output
-        uses: actions/download-artifact@v3
+      - name: Restore cache
+        uses: actions/cache@v3
         with:
-          name: build-artifacts
+          path: |
+            ~/.bun
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun.js
         uses: oven-sh/setup-bun@v1
@@ -73,10 +80,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore node_modules and build output
-        uses: actions/download-artifact@v3
+      - name: Restore cache
+        uses: actions/cache@v3
         with:
-          name: build-artifacts
+          path: |
+            ~/.bun
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun.js
         uses: oven-sh/setup-bun@v1
@@ -96,10 +108,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Restore node_modules and build output
-        uses: actions/download-artifact@v3
+      - name: Restore cache
+        uses: actions/cache@v3
         with:
-          name: build-artifacts
+          path: |
+            ~/.bun
+            node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: Setup Bun.js
         uses: oven-sh/setup-bun@v1
