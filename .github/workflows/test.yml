@@ -124,6 +124,6 @@ jobs:
           bun-version: 1.1.34
 
       - name: Debug glob expansion
-        run: ls -la
+        run: ls -la packages/brisa/src/cli/serve/node-serve
       - name: Run Node.js tests
         run: bun run test:node
