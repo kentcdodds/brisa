@@ -7,7 +7,7 @@ on:
     branches: [canary]
 
 jobs:
-  bun-tests:
+  setup:
     runs-on: ${{ matrix.os }}
     if: ${{ !contains(github.event.head_commit.message, 'docs:') }}
     strategy:
@@ -15,6 +15,7 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -23,32 +24,51 @@ jobs:
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: 1.1.35
+
+      - name: Cache Bun dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.bun/install/cache/v1
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+
       - name: Install dependencies
         run: bun install
+
       - name: Build project
-        run: bun run build && bun run create-brisa:build
+        run: |
+          bun run build
+          bun run create-brisa:build
+
+  bun-tests:
+    needs: setup
+    runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, 'docs:') }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
       - name: Run Bun tests
-        run: bun test
+        run: bun run test
+
+  e2e-tests:
+    needs: setup
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Run e2e tests
+        run: bun run test:e2e
 
   node-tests:
+    needs: setup
     runs-on: ${{ matrix.os }}
     if: ${{ !contains(github.event.head_commit.message, 'docs:') }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "22"
-      - name: Setup Bun.js
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: 1.1.35
-      - name: Install dependencies
-        run: bun install
-      - name: Build project
-        run: bun run build && bun run create-brisa:build
       - name: Run Node.js tests
         run: bun run test:node
