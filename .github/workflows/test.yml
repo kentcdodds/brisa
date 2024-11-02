@@ -25,6 +25,12 @@ jobs:
         with:
           bun-version: 1.1.35
 
+      - name: Verify Bun installation
+        run: |
+          echo "Bun version:"
+          bun --version
+        shell: bash
+
       - name: Cache Bun dependencies
         uses: actions/cache@v3
         with:
@@ -51,6 +57,7 @@ jobs:
     steps:
       - name: Run Bun tests
         run: bun run test
+        shell: bash
 
   e2e-tests:
     needs: setup
@@ -61,6 +68,7 @@ jobs:
     steps:
       - name: Run e2e tests
         run: bun run test:e2e
+        shell: bash
 
   node-tests:
     needs: setup
@@ -72,3 +80,4 @@ jobs:
     steps:
       - name: Run Node.js tests
         run: bun run test:node
+        shell: bash
