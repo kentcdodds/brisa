@@ -95,8 +95,9 @@ jobs:
             ${{ runner.os }}-bun-
 
       - name: Build project
-        run: |
-          bun run build
+        run: bunx playwright install
+      - run: bunx playwright install-deps
+      - run: bun run build
 
       - name: Run e2e tests
         run: bun run test:e2e

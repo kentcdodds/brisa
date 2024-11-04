@@ -1,71 +1,244 @@
-import { describe, it , expect } from 'bun:test'
+import { describe, it , expect, beforeAll, afterAll } from 'bun:test'
+import { $, spawn } from 'bun'
 import fs from 'node:fs'
 import path from 'node:path'
+import { chromium, firefox, webkit } from "playwright";
+
+const browsers = [chromium, firefox, webkit]
 
 describe('e2e examples', () => {
   describe('with-api-routes', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-api-routes')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-elysia', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-elysia')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-external-web-component', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-elysia')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-i18n', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-i18n')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-middleware', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-middleware')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-pandacss', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-pandacss')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-sqlite-with-server-action', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-sqlite-with-server-action')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-streaming-list', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-streaming-list')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-suspense', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-suspense')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-tailwindcss', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-tailwindcss')
+
+    beforeAll(setup);
+    afterAll(teardown);
+
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
   
   describe('with-view-transitions', () => {
-    it('todo', () => {
-      expect(true).toBeTrue()
-    })
+    const { setup, teardown } = prepareProject('with-view-transitions')
+
+    beforeAll(setup);
+    afterAll(teardown);
+    
+    for (const browserType of browsers) {
+      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
+        const browser = await browserType.launch();
+        const page = await browser.newPage();
+        const response = await page.goto('http://localhost:3000');
+        expect(response).not.toBeNull();
+        expect(response!.status()).toBe(200);
+        expect(await response!.headerValue("content-type")).toContain("text/html");
+        await browser.close();
+      });
+    }
   })
 })
+
+function prepareProject(exampleName: string) {
+  let serverProcess
+
+  async function setup() {
+    const exampleDir = path.join(import.meta.dir, '..', 'examples', exampleName);
+
+    console.log(`✅ Setting up ${exampleName} example...`);
+    await $`cd ${exampleDir} && bun i && bun run build`;
+
+    serverProcess = spawn({
+      cmd: ["bun", "start"],
+      cwd: exampleDir,
+      stdout: "inherit",
+      stderr: "inherit",
+    });
+
+    await Bun.sleep(1000);
+  }
+
+  async function teardown() {
+    await serverProcess.kill()
+  }
+
+  return { setup, teardown }
+}
