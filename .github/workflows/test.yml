@@ -38,11 +38,6 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Build project
-        run: |
-          bun run build
-          bun run create-brisa:build
-
   bun-tests:
     needs: setup
     runs-on: ${{ matrix.os }}
@@ -67,6 +62,11 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-bun-
+
+      - name: Build project
+        run: |
+          bun run build
+          bun run create-brisa:build
 
       - name: Run Bun tests
         run: bun run test
@@ -93,6 +93,10 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-bun-
+
+      - name: Build project
+        run: |
+          bun run build
 
       - name: Run e2e tests
         run: bun run test:e2e
@@ -126,6 +130,11 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-bun-
+
+      - name: Build project
+        run: |
+          bun run build
+          bun run create-brisa:build
 
       - name: Run Node.js tests
         run: bun run test:node
