@@ -4,6 +4,7 @@ created: 11/04/2024
 description: "Brisa release notes for version 0.1.4"
 author: Aral Roca
 author_site: https://x.com/aralroca
+cover_image: /images/blog-images/release-1.0.4.webp
 ---
 
 This release has been based mainly on fixing bugs. This release fixes 11 bugs. Thanks to all contibutors:
