@@ -1,224 +1,54 @@
 import { describe, it , expect, beforeAll, afterAll } from 'bun:test'
 import { $, spawn } from 'bun'
-import fs from 'node:fs'
 import path from 'node:path'
 import { chromium, firefox, webkit } from "playwright";
 
 const browsers = [chromium, firefox, webkit]
+const timeout = 30000
+const examples = [
+  { name: 'with-api-routes' },
+  { name: 'with-elysia' },
+  { name: 'with-external-web-component' },
+  { name: 'with-i18n' },
+  { name: 'with-middleware' },
+  { name: 'with-pandacss' },
+  { name: 'with-sqlite-with-server-action' },
+  { name: 'with-streaming-list' },
+  { name: 'with-suspense' },
+  { name: 'with-tailwindcss' },
+  { name: 'with-view-transitions' }
+]
 
 describe('e2e examples', () => {
-  describe('with-api-routes', () => {
-    const { setup, teardown } = prepareProject('with-api-routes')
+  for (const example of examples) {
+    describe(example.name, () => {
+      const { setup, teardown, origin } = prepareProject(example.name);
 
-    beforeAll(setup);
-    afterAll(teardown);
+      beforeAll(setup);
+      afterAll(teardown);
 
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-elysia', () => {
-    const { setup, teardown } = prepareProject('with-elysia')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-external-web-component', () => {
-    const { setup, teardown } = prepareProject('with-elysia')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-i18n', () => {
-    const { setup, teardown } = prepareProject('with-i18n')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-middleware', () => {
-    const { setup, teardown } = prepareProject('with-middleware')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-pandacss', () => {
-    const { setup, teardown } = prepareProject('with-pandacss')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-sqlite-with-server-action', () => {
-    const { setup, teardown } = prepareProject('with-sqlite-with-server-action')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-streaming-list', () => {
-    const { setup, teardown } = prepareProject('with-streaming-list')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-suspense', () => {
-    const { setup, teardown } = prepareProject('with-suspense')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-tailwindcss', () => {
-    const { setup, teardown } = prepareProject('with-tailwindcss')
-
-    beforeAll(setup);
-    afterAll(teardown);
-
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
-  
-  describe('with-view-transitions', () => {
-    const { setup, teardown } = prepareProject('with-view-transitions')
-
-    beforeAll(setup);
-    afterAll(teardown);
-    
-    for (const browserType of browsers) {
-      it(`should load home page with status 200 and HTML content on ${browserType}`, async () => {
-        const browser = await browserType.launch();
-        const page = await browser.newPage();
-        const response = await page.goto('http://localhost:3000');
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue("content-type")).toContain("text/html");
-        await browser.close();
-      });
-    }
-  })
+      for (const browserType of browsers) {
+        it(`should load home page with status 200 and HTML content on ${browserType.name()}`, async () => {
+          const browser = await browserType.launch();
+          try {
+            const page = await browser.newPage();
+            const response = await page.goto(origin, { timeout });
+            expect(response).not.toBeNull();
+            expect(response!.status()).toBe(200);
+            expect(await response!.headerValue("content-type")).toContain("text/html");
+         } finally {
+            await browser.close();
+         }
+        });
+      }
+    });
+  }
 })
 
 function prepareProject(exampleName: string) {
   let serverProcess
+
+  globalThis.currentPort = globalThis.currentPort ? globalThis.currentPort + 1 : 3000
 
   async function setup() {
     const exampleDir = path.join(import.meta.dir, '..', 'examples', exampleName);
@@ -227,18 +57,17 @@ function prepareProject(exampleName: string) {
     await $`cd ${exampleDir} && bun i && bun run build`;
 
     serverProcess = spawn({
-      cmd: ["bun", "start"],
+      cmd: ["bun", "start", "-p", globalThis.currentPort.toString()],
       cwd: exampleDir,
       stdout: "inherit",
       stderr: "inherit",
     });
-
-    await Bun.sleep(1000);
   }
 
   async function teardown() {
-    await serverProcess.kill()
+    console.log(`✅ Tearing down ${exampleName} example...`);
+    await serverProcess.kill('SIGINT')
   }
 
-  return { setup, teardown }
+  return { setup, teardown, origin: `http://localhost:${globalThis.currentPort}` }
 }
