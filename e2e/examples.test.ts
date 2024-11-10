@@ -17,17 +17,215 @@ const engine: Record<string, any> = {
 };
 const timeout = 30000;
 const examples = [
-  { id: 'with-api-routes' },
-  { id: 'with-elysia' },
-  { id: 'with-external-web-component' },
-  { id: 'with-i18n' },
-  { id: 'with-middleware' },
-  { id: 'with-pandacss' },
-  { id: 'with-sqlite-with-server-action' },
-  { id: 'with-streaming-list' },
-  { id: 'with-suspense' },
-  { id: 'with-tailwindcss' },
-  { id: 'with-view-transitions' },
+  {
+    id: 'with-api-routes',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-elysia',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-external-web-component',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-i18n',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-middleware',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-pandacss',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-sqlite-with-server-action',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-streaming-list',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-suspense',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-tailwindcss',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
+  {
+    id: 'with-view-transitions',
+    tests: [
+      {
+        title: 'should load home page with status 200 and HTML content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(origin, {
+            waitUntil: 'load',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'text/html',
+          );
+        },
+      },
+    ],
+  },
 ];
 
 describe.each(examples)('e2e example', (example) => {
@@ -56,17 +254,11 @@ describe.each(examples)('e2e example', (example) => {
         await page?.close?.();
       });
 
-      it(`should load home page with status 200 and HTML content`, async () => {
-        const response = await page.goto(origin, {
-          waitUntil: 'load',
-          timeout,
+      for (const { title, test } of example.tests) {
+        it(title, async () => {
+          await test(page, origin);
         });
-        expect(response).not.toBeNull();
-        expect(response!.status()).toBe(200);
-        expect(await response!.headerValue('content-type')).toContain(
-          'text/html',
-        );
-      });
+      }
     });
   });
 });
