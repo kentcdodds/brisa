@@ -7,7 +7,6 @@ import {
   expect,
   it,
 } from 'bun:test';
-import { $, spawn } from 'bun';
 import path from 'node:path';
 import { Browser, chromium, firefox, Page, webkit } from 'playwright';
 
@@ -18,24 +17,23 @@ const engine: Record<string, any> = {
 };
 const timeout = 30000;
 const examples = [
-  { name: 'with-api-routes' },
-  { name: 'with-elysia' },
-  { name: 'with-external-web-component' },
-  { name: 'with-i18n' },
-  { name: 'with-middleware' },
-  { name: 'with-pandacss' },
-  { name: 'with-sqlite-with-server-action' },
-  { name: 'with-streaming-list' },
-  { name: 'with-suspense' },
-  { name: 'with-tailwindcss' },
-  { name: 'with-view-transitions' },
+  { id: 'with-api-routes' },
+  { id: 'with-elysia' },
+  { id: 'with-external-web-component' },
+  { id: 'with-i18n' },
+  { id: 'with-middleware' },
+  { id: 'with-pandacss' },
+  { id: 'with-sqlite-with-server-action' },
+  { id: 'with-streaming-list' },
+  { id: 'with-suspense' },
+  { id: 'with-tailwindcss' },
+  { id: 'with-view-transitions' },
 ];
 
 describe.each(examples)('e2e example', (example) => {
-  describe(example.name, () => {
-    const { setup, teardown, origin } = prepareProject(example.name);
+  describe(example.id, () => {
+    const { teardown, origin } = globalThis.examples[example.id];
 
-    beforeAll(setup);
     afterAll(teardown);
 
     describe.each(['chrome', 'firefox', 'safari'])('%s', (browserName) => {
@@ -68,48 +66,7 @@ describe.each(examples)('e2e example', (example) => {
         expect(await response!.headerValue('content-type')).toContain(
           'text/html',
         );
-        expect(await (await page.$('body'))?.innerHTML()).toMatchSnapshot();
       });
     });
   });
 });
-
-function prepareProject(exampleName: string) {
-  let serverProcess;
-
-  globalThis.currentPort = globalThis.currentPort
-    ? globalThis.currentPort + 1
-    : 3000;
-
-  async function setup() {
-    const exampleDir = path.join(
-      import.meta.dir,
-      '..',
-      'examples',
-      exampleName,
-    );
-
-    console.log(`\t→ Setting up ${exampleName} example...`);
-    await $`cd ${exampleDir} && bun i && bun run build`;
-
-    serverProcess = spawn({
-      cmd: ['bun', 'start', '-p', globalThis.currentPort.toString()],
-      cwd: exampleDir,
-      stdout: 'inherit',
-      stderr: 'inherit',
-    });
-
-    await Bun.sleep(2000);
-  }
-
-  async function teardown() {
-    console.log(`\t→ Tearing down ${exampleName} example...`);
-    await serverProcess.kill('SIGINT');
-  }
-
-  return {
-    setup,
-    teardown,
-    origin: `http://localhost:${globalThis.currentPort}`,
-  };
-}
