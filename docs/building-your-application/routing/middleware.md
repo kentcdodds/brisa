@@ -26,7 +26,7 @@ export default async function middleware({
   i18n,
   route,
   headers,
-}: RequestContext): Response | undefined {
+}: RequestContext): Promise<Response | undefined> {
   const { locale } = i18n;
   const isUserRoute = route?.name?.startsWith("/user/[username]");
 
@@ -74,7 +74,7 @@ import { type RequestContext } from "brisa";
 
 export default async function middleware(
   request: RequestContext,
-): Response | undefined {
+): Promise<Response | undefined> {
   const url = new URL(request.url);
 
   if (url.pathname === "/favicon.svg") {
