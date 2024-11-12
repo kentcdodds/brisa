@@ -14,11 +14,9 @@ export default function brisaTailwindcss() {
     },
     defaultCSS: {
       content: `
-        @tailwind base;
-        @tailwind components;
-        @tailwind utilities;
-        @import 'tailwindcss/preflight';
-        @import 'tailwindcss/theme';
+        @import "tailwindcss/theme" layer(theme);
+        @import "tailwindcss/preflight" layer(base);
+        @import "tailwindcss/utilities" layer(utilities);
       `,
       applyDefaultWhenEvery: (content: string) => !content.includes('tailwind'),
     },
