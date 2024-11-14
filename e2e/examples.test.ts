@@ -7,7 +7,6 @@ import {
   expect,
   it,
 } from 'bun:test';
-import path from 'node:path';
 import { Browser, chromium, firefox, Page, webkit } from 'playwright';
 
 const engine: Record<string, any> = {
@@ -28,12 +27,46 @@ const examples = [
             timeout,
           });
           expect(response).not.toBeNull();
-          expect(response!.status()).toBe(200);
-          expect(await response!.headerValue('content-type')).toContain(
+          expect(response.status()).toBe(200);
+          expect(await response.headerValue('content-type')).toContain(
             'text/html',
           );
+
+          const text = await response.text();
+          expect(html).toContain('Loading Animals');
+
+          // Before API call
+          ['Dog', 'Cat', 'Bird', 'Fish', 'Horse'].forEach((animal) => {
+            expect(text).not.toContain(animal);
+          })
+
+          // After API call
+          ['Dog', 'Cat', 'Bird', 'Fish', 'Horse'].forEach(async (animal) => {
+            expect(await page.textContent(`//body[contains(., '${animal}')]`)).toBe(animal);
+          })
         },
       },
+      {
+        title: 'should load /api/animal route with status 200 and JSON content',
+        test: async (page: Page, origin: string) => {
+          const response = await page.goto(`${origin}/api/animal`, {
+            waitUntil: 'domcontentloaded',
+            timeout,
+          });
+          expect(response).not.toBeNull();
+          expect(response!.status()).toBe(200);
+          expect(await response!.headerValue('content-type')).toContain(
+            'application/json',
+          );
+          expect(await response!.json()).toEqual([
+            { id: '1', name: 'Dog' },
+            { id: '2', name: 'Cat' },
+            { id: '3', name: 'Bird' },
+            { id: '4', name: 'Fish' },
+            { id: '5', name: 'Horse' },
+          ]);
+        },
+      }
     ],
   },
   {
