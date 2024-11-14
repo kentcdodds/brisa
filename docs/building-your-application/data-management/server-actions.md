@@ -689,7 +689,7 @@ Other frameworks automatically encrypt everything you use within the server acti
 
 ### Using data attributes
 
-You can use [`data-` attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) to transfer data from the client to the server. This is useful when you need to send data that is not in a form or in a link.
+You can use [`data-` attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) to transfer data from the client to the server. This is useful when you need to send data that is not in a form.
 
 ```tsx
 <input
@@ -707,7 +707,7 @@ You can use [`data-` attributes](https://developer.mozilla.org/en-US/docs/Learn/
 
 ### Using the store
 
-You can use the store to transfer data from the client to the server. This is useful when you need to send data that is not in a form or in a link.
+You can use the store to transfer data from the client to the server. This is useful when you need to send data that is not in a form.
 
 ```tsx
 export default function ServerComponent({}, { store }) {
