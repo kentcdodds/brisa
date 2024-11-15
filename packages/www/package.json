@@ -1,6 +1,6 @@
 {
   "name": "www",
-  "version": "0.1.5-canary.8",
+  "version": "0.1.5",
   "module": "src/pages/index.tsx",
   "type": "module",
   "scripts": {
@@ -36,9 +36,9 @@
     "@types/jsdom": "21.1.7",
     "sharp": "0.33.5"
   },
-  "packageManager": "bun@1.1.35",
+  "packageManager": "bun@1.1.34",
   "engines": {
-    "bun": ">= 1.1.35",
+    "bun": ">= 1.1.34",
     "npm": ">= 10.0.0",
     "yarn": ">= 3.0.0",
     "pnpm": ">= 9.8.0"
