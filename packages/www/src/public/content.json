@@ -568,7 +568,7 @@
   {
     "id": "/api-reference/components/web-context#self",
     "title": "self",
-    "text": "self: HTMLElement The self property in the WebContext provides access to the DOM element of the web component. It allows developers to interact directly with the component's rendered output, enabling manipulation and customization. Example: self.addEventListener(\"click\", () => {\n  console.log(\"Web component clicked!\");\n}); It is important to exercise caution when directly manipulating the DOM element using the self property. This approach can lead to potential issues, such as conflicts with the reactive nature of Brisa components. Therefore, it is recommended to use this property judiciously and only when necessary. It is an empty object during SSR to use it in some specific cases like reseting shadowRoot.adoptedStyleSheets. Normally it is better to use it inside an effect to ensure that is executed only in the client-side.",
+    "text": "self: HTMLElement The self property in the WebContext provides access to the DOM element of the web component. It allows developers to interact directly with the component's rendered output, enabling manipulation and customization. Example: self.addEventListener(\"click\", () => {\n  console.log(\"Web component clicked!\");\n}); The self property has some cases that work during the Server-Side Rendering (SSR): self.attachInternals() - You can use it at the top level that during the SSR ignores the method.\nself.shadowRoot.adoptedStyleSheets - You can use it to clean global styles in web components and it works during the SSR.\nself.setAttribute() - You can modify attributes of the web component during the SSR, for example to force a tabindex of an element without having to manually set it when consuming the web component.\nself.getAttribute() - You can get attributes of the web component during the SSR. Brisa reactivity does not work here, but you can use it to get attribute values passed to the web component.\nself.addEventListener - During the SSR, the execution will be ignored, but you can use it to register events at the top level of the web component where the subscription will be made on the client.\nself.removeEventListener: During the SSR, the execution will be ignored, but you can use it to clean events at the top level of the web component where the cleanup will be done on the client. It is important to exercise caution when directly manipulating the DOM element using the self property. This approach can lead to potential issues, such as conflicts with the reactive nature of Brisa components. Therefore, it is recommended to use this property judiciously and only when necessary. It is an empty object during SSR to use it in some specific cases like reseting shadowRoot.adoptedStyleSheets. Normally it is better to use it inside an effect to ensure that is executed only in the client-side.",
     "titles": [
       "Web Context"
     ]
@@ -602,7 +602,7 @@
   {
     "id": "/api-reference/components/web-context#example-reactive-url-params",
     "title": "Example: Reactive URL Params",
-    "text": "This is another example to have params of the url reactive, working with SPA navigation, for example for filtering a list of items using the URL query parameters as state: src/web-components/_integrations.tsx import type { WebContext, WebContextPlugin } from \"brisa\";\n\nfunction paramsPlugin(ctx: WebContext) {\n  Object.assign(ctx, {\n    get params() {\n      let params = ctx.state<{ [k: string]: string }>();\n\n      ctx.effect(() => {\n        params.value = Object.fromEntries(\n          new URLSearchParams(window.location.search).entries(),\n        );\n\n        const navigate = (e: any) => {\n          params.value = Object.fromEntries(\n            new URL(e.destination.url).searchParams.entries(),\n          );\n        };\n\n        window.navigation?.addEventListener(\"navigate\", navigate);\n        ctx.cleanup(\n          () => window.navigation?.removeEventListener(\"navigate\", navigate),\n        );\n      });\n\n      return params;\n    },\n  });\n\n  return ctx;\n}\n\nexport const webContextPlugins: WebContextPlugin[] = [paramsPlugin]; Usage: import type { WebContext } from \"brisa\";\n\nexport default function SearchResult({}, { params }: WebContext) {\n  return <div>{params.value?.q}</div>;\n} A web component in the layout is not unmounted after SPA navigation. Therefore, we need the params signal to be reactive and update the component when the URL changes. Ultimately, we believe that the JavaScript community will contribute more refined signals than these examples. We encourage developers to share their signals with the community to enhance the Brisa ecosystem.",
+    "text": "This is another example to have params of the url reactive, working with SPA navigation, for example for filtering a list of items using the URL query parameters as state: src/web-components/_integrations.tsx import type { WebContext, WebContextPlugin } from \"brisa\";\n\nfunction paramsPlugin(ctx: WebContext) {\n  Object.assign(ctx, {\n    get params() {\n      let params = ctx.state<{ [k: string]: string }>();\n\n      ctx.effect(() => {\n        params.value = Object.fromEntries(\n          new URLSearchParams(window.location.search).entries(),\n        );\n\n        const navigate = (e: any) => {\n          params.value = Object.fromEntries(\n            new URL(e.destination.url).searchParams.entries(),\n          );\n        };\n\n        window.navigation?.addEventListener(\"navigate\", navigate);\n        ctx.cleanup(() =>\n          window.navigation?.removeEventListener(\"navigate\", navigate),\n        );\n      });\n\n      return params;\n    },\n  });\n\n  return ctx;\n}\n\nexport const webContextPlugins: WebContextPlugin[] = [paramsPlugin]; Usage: import type { WebContext } from \"brisa\";\n\nexport default function SearchResult({}, { params }: WebContext) {\n  return <div>{params.value?.q}</div>;\n} A web component in the layout is not unmounted after SPA navigation. Therefore, we need the params signal to be reactive and update the component when the URL changes. Ultimately, we believe that the JavaScript community will contribute more refined signals than these examples. We encourage developers to share their signals with the community to enhance the Brisa ecosystem.",
     "titles": [
       "Web Context",
       "Expanding the WebContext"
@@ -3077,7 +3077,15 @@
   {
     "id": "/building-your-application/configuring/clustering#example",
     "title": "Example",
-    "text": "//brisa.config.ts\nimport type { Configuration } from \"brisa\";\n\nexport default {\n  clustering: true, // This enable clustering in prod and dev.\n} satisfies Configuration; To make it possible, Brisa uses node:cluster to handle the clustering. This Node API also works in Bun. If you need to use a Custom Server, this configuration does not apply, and you need to handle the clustering yourself.",
+    "text": "//brisa.config.ts\nimport type { Configuration } from \"brisa\";\n\nexport default {\n  clustering: true, // This enable clustering in prod and dev.\n} satisfies Configuration; To make it possible, Brisa uses node:cluster to handle the clustering. This Node API also works in Bun.",
+    "titles": [
+      "clustering"
+    ]
+  },
+  {
+    "id": "/building-your-application/configuring/clustering#why-should-i-turn-off-clustering",
+    "title": "Why should I turn off clustering?",
+    "text": "If you are using a popular process manager like PM2, make sense to use clustering: false in Brisa to avoid conflicts between the process manager and Brisa. PM2 work by default for Node.js applications, and it will handle the clustering for you. However, you can use PM2 with Bun.js as well. If you need to use a Custom Server, this configuration does not apply, and you need to handle the clustering yourself.",
     "titles": [
       "clustering"
     ]
@@ -3869,6 +3877,32 @@
     ]
   },
   {
+    "id": "/building-your-application/data-management/server-actions#transfer-data",
+    "title": "Transfer data",
+    "text": "Other frameworks automatically encrypt everything you use within the server action, in Brisa to give developers more control and only encrypt what is sensitive and avoid the blocking process of encryption that can greatly lower the req/sec, you have to specify what data you want to transfer.",
+    "titles": [
+      "Server Actions"
+    ]
+  },
+  {
+    "id": "/building-your-application/data-management/server-actions#using-data-attributes",
+    "title": "Using data attributes",
+    "text": "You can use data- attributes to transfer data from the client to the server. This is useful when you need to send data that is not in a form. <input\n  debounceInput={300}\n  onInput={(e) => {\n    // All this code runs only on the server\n    const value = e.target.value;\n\n    // Get the value in the server action\n    const id = e.target.dataset.id;\n  }}\n  data-id=\"123\"\n/>",
+    "titles": [
+      "Server Actions",
+      "Transfer data"
+    ]
+  },
+  {
+    "id": "/building-your-application/data-management/server-actions#using-the-store",
+    "title": "Using the store",
+    "text": "You can use the store to transfer data from the client to the server. This is useful when you need to send data that is not in a form. export default function ServerComponent({}, { store }) {\n  store.set(\"foo\", \"bar\");\n\n  // Transfer the value to the client\n  store.transferToClient([\"foo\"]);\n\n  return (\n    <button\n      onClick={() => {\n        // Get the value in the server action\n        const foo = store.get(\"foo\");\n      }}\n    >\n      Click\n    </button>\n  );\n}",
+    "titles": [
+      "Server Actions",
+      "Transfer data"
+    ]
+  },
+  {
     "id": "/building-your-application/data-management/server-actions#transfer-sensitive-data",
     "title": "Transfer sensitive data",
     "text": "If you want to transfer sensitive data from the render to use it later on the action you can use: store.transferToClient([\"some-key\"], { encrypt: true }); On the client it will always be encrypted and there will be no way to decrypt it, while on the server action you will have access with: store.get(\"some-key\"); // In the server is automatic decrypted Brisa uses aes-256-cbc for encryption, a combination of cryptographic algorithms used to securely encrypt information recommended by OpenSSL. Encryption keys are generated during the build of your project. It is important to note that encryption is a blocking process and may increase the time it takes for the request. It also exposes public data for the server action to access. Before using encrypt, consider if there is a better way to have this data from the action like querying a DB, without the need to expose it in the client.",
@@ -4220,8 +4254,8 @@
     ]
   },
   {
-    "id": "/building-your-application/integrations/tailwind-css#integrating-tailwind-css",
-    "title": "Integrating Tailwind CSS",
+    "id": "/building-your-application/integrations/tailwind-css#integrating-tailwind-css-v4",
+    "title": "Integrating Tailwind CSS v4",
     "text": "Brisa, offers versatile integration with third-party libraries like TailwindCSS to be automatically handled for the Brisa internals. Tailwind lets you use utility classes instead of writing CSS. These utility classes are mostly one-to-one with a certain CSS property setting: for example, adding the text-lg to an element is equivalent to setting font-size: 1.125rem in CSS. You might find it easier to write and maintain your styles using these predefined utility classes!",
     "titles": []
   },
@@ -4230,23 +4264,23 @@
     "title": "Installation",
     "text": "Run this command to integrate TailwindCSS in your Brisa project: brisa add tailwindcss And you are ready to use TailwindCSS in your Brisa project.",
     "titles": [
-      "Integrating Tailwind CSS"
+      "Integrating Tailwind CSS v4"
     ]
   },
   {
     "id": "/building-your-application/integrations/tailwind-css#manual-installation",
     "title": "Manual Installation",
-    "text": "If you want to install TailwindCSS manually, you can do it by running: npm install tailwindcss postcss brisa-tailwindcss And then, you can add the integration in your brisa.config.ts file: brisa.config.ts import brisaTailwindCSS from \"brisa-tailwindcss\";\n\nexport default {\n  integrations: [brisaTailwindCSS()],\n} satisfies Configuration; And you are ready to use TailwindCSS in your Brisa project. Installing the dependencies manually, take care to use a TailwindCSS version v.4.x.",
+    "text": "If you want to install TailwindCSS manually, you can do it by running: bun install tailwindcss@next postcss brisa-tailwindcss And then, you can add the integration in your brisa.config.ts file: brisa.config.ts import brisaTailwindCSS from \"brisa-tailwindcss\";\n\nexport default {\n  integrations: [brisaTailwindCSS()],\n} satisfies Configuration; And you are ready to use TailwindCSS in your Brisa project. Installing the dependencies manually, take care to use a TailwindCSS version v.4.x.",
     "titles": [
-      "Integrating Tailwind CSS"
+      "Integrating Tailwind CSS v4"
     ]
   },
   {
     "id": "/building-your-application/integrations/tailwind-css#defaults",
     "title": "Defaults",
-    "text": "If you don't have any .css file with @tailwind directive or tailwindcss import, Brisa will automatically generate in build-time a default CSS file with TailwindCSS directives to be similar than TailwindCSS CDN: @tailwind base;\n@tailwind components;\n@tailwind utilities;\n@import 'tailwindcss/preflight';\n@import 'tailwindcss/theme'; In the case you want to override the default CSS file, you can create a .css file in your src with @tailwind directives or @import 'tailwindcss/... and Brisa will use it instead of the default one. This .css file you need to import it in your src/layout.ts file.",
+    "text": "If you don't have any .css file with @tailwind directive or tailwindcss import, Brisa will automatically generate in build-time a default CSS file with TailwindCSS directives to be similar than TailwindCSS CDN: @import \"tailwindcss/theme\" layer(theme);\n@import \"tailwindcss/preflight\" layer(base);\n@import \"tailwindcss/utilities\" layer(utilities); In the case you want to override the default CSS file, you can create a .css file in your src with @tailwind directives or @import 'tailwindcss/... and Brisa will use it instead of the default one. This .css file you need to import it in your src/layout.ts file.",
     "titles": [
-      "Integrating Tailwind CSS"
+      "Integrating Tailwind CSS v4"
     ]
   },
   {
@@ -4254,7 +4288,7 @@
     "title": "Usage",
     "text": "You can use TailwindCSS classes in your Brisa project as you would in a regular TSX file: export default function Home() {\n  return (\n    <div className=\"bg-gray-100\">\n      <h1 className=\"text-2xl font-bold text-gray-800\">Hello, world!</h1>\n    </div>\n  );\n}",
     "titles": [
-      "Integrating Tailwind CSS"
+      "Integrating Tailwind CSS v4"
     ]
   },
   {
@@ -4887,7 +4921,7 @@
   {
     "id": "/building-your-application/routing/middleware#example",
     "title": "Example",
-    "text": "// middleware.ts\nimport { type RequestContext } from \"brisa\";\n\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({\n  i18n,\n  route,\n  headers,\n}: RequestContext): Response | undefined {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRoute && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n}\n\n\n\n// middleware.js\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({ i18n, route, headers }) {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRout && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n} Only is possible to access to route property inside api routes and pages routes. This is to support handling of dynamic routes, catch-all, etc in a simple way. In the case of assets you can look it up through the request: import { type RequestContext } from \"brisa\";\n\nexport default async function middleware(\n  request: RequestContext,\n): Response | undefined {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n}\n\n\n\nexport default async function middleware(request) {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n} However, this is not the best way to serve assets. You can put the static files directly inside the public folder. More information here.",
+    "text": "// middleware.ts\nimport { type RequestContext } from \"brisa\";\n\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({\n  i18n,\n  route,\n  headers,\n}: RequestContext): Promise<Response | undefined> {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRoute && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n}\n\n\n\n// middleware.js\n// This function can be without `async` if you are not using `await` inside\nexport default async function middleware({ i18n, route, headers }) {\n  const { locale } = i18n;\n  const isUserRoute = route?.name?.startsWith(\"/user/[username]\");\n\n  if (isUserRout && !(await isUserLogged(headers))) {\n    return new Response(\"\", {\n      status: 302,\n      headers: {\n        Location: `/${locale}/login`,\n      },\n    });\n  }\n} Only is possible to access to route property inside api routes and pages routes. This is to support handling of dynamic routes, catch-all, etc in a simple way. In the case of assets you can look it up through the request: import { type RequestContext } from \"brisa\";\n\nexport default async function middleware(\n  request: RequestContext,\n): Promise<Response | undefined> {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n}\n\n\n\nexport default async function middleware(request) {\n  const url = new URL(request.url);\n\n  if (url.pathname === \"/favicon.svg\") {\n    return new Response(\n      `\n      <svg>\n        <rect width=\"100\" height=\"100\" fill=\"red\" />\n      </svg>\n    `,\n      {\n        headers: { \"content-type\": \"image/svg+xml\" },\n      },\n    );\n  }\n} However, this is not the best way to serve assets. You can put the static files directly inside the public folder. More information here.",
     "titles": [
       "Middleware"
     ]
