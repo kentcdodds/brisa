@@ -66,7 +66,7 @@ There were behaviors that sometimes the Web Components made a double rendering d
 
 Some constants were not being replaced in the standalone build, causing unexpected behaviors. This has been fixed in this release.
 
-## Improve control of errors in `getServeOptions`
+## Improve control of errors in `getServeOptions`
 
 In the first implementation, the `getServeOptions` was something internal to Brisa, where the errors were displayed on the terminal, they were handled there. When we made this public API, we didn't take into account extracting the errors to be able to control them from the outside. Now, the errors are handled from the outside and can be controlled in a simpler way.
 
