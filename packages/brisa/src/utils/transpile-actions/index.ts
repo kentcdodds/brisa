@@ -1,4 +1,3 @@
-import type { BunPlugin } from 'bun';
 import type { ESTree } from 'meriyah';
 import fs from 'node:fs';
 import { join } from 'node:path';
@@ -25,61 +24,7 @@ const FN_EXPRESSION_TYPES = new Set([
   'FunctionExpression',
 ]);
 
-export default async function compileActions({
-  actionsEntrypoints,
-  define,
-}: CompileActionsParams) {
-  const { BUILD_DIR, IS_PRODUCTION, CONFIG } = getConstants();
-  const isNode = CONFIG.output === 'node' && IS_PRODUCTION;
-  const rawActionsDir = join(BUILD_DIR, 'actions_raw');
-  const external = CONFIG.external ? [...CONFIG.external, 'brisa'] : ['brisa'];
-  const res = await Bun.build({
-    entrypoints: actionsEntrypoints,
-    outdir: join(BUILD_DIR, 'actions'),
-    external,
-    sourcemap: IS_PRODUCTION ? undefined : 'inline',
-    root: rawActionsDir,
-    target: isNode ? 'node' : 'bun',
-    minify: IS_PRODUCTION,
-    splitting: true,
-    define,
-    plugins: [actionPlugin({ actionsEntrypoints })],
-  });
-
-  if (!res.success) {
-    logBuildError('Failed to compile actions', res.logs);
-  }
-
-  fs.rmSync(rawActionsDir, { recursive: true });
-
-  return res;
-}
-
-function actionPlugin({
-  actionsEntrypoints,
-}: {
-  actionsEntrypoints: string[];
-}) {
-  // These replaces are to fix the regex in Windows
-  const filter = new RegExp(
-    `(${actionsEntrypoints.join('|').replace(/\\/g, '\\\\')})$`.replace(
-      /\//g,
-      '[\\\\/]',
-    ),
-  );
-
-  return {
-    name: 'action-plugin',
-    setup(build) {
-      build.onLoad({ filter }, async ({ path, loader }) => {
-        const code = await Bun.file(path).text();
-        return { contents: transformToActionCode(code), loader };
-      });
-    },
-  } satisfies BunPlugin;
-}
-
-export function transformToActionCode(code: string) {
+export function transpileActions(code: string) {
   let ast = parseCodeToAST(code);
 
   ast = addResolveActionImport(ast);
@@ -643,4 +588,40 @@ function wrapWithTypeCatch({
       },
     ],
   };
+}
+
+export async function buildActions({
+  actionsEntrypoints,
+  define,
+}: CompileActionsParams) {
+  const { BUILD_DIR, IS_PRODUCTION, CONFIG } = getConstants();
+  const isNode = CONFIG.output === 'node' && IS_PRODUCTION;
+  const rawActionsDir = join(BUILD_DIR, 'actions_raw');
+  const barrelFile = join(rawActionsDir, 'index.ts');
+
+  await Bun.write(
+    barrelFile,
+    actionsEntrypoints.map((p) => `export * from '${p}'`).join('\n'),
+  );
+
+  const external = CONFIG.external ? [...CONFIG.external, 'brisa'] : ['brisa'];
+  const res = await Bun.build({
+    entrypoints: [barrelFile],
+    outdir: join(BUILD_DIR, 'actions'),
+    external,
+    sourcemap: IS_PRODUCTION ? undefined : 'inline',
+    root: rawActionsDir,
+    target: isNode ? 'node' : 'bun',
+    minify: IS_PRODUCTION,
+    splitting: true,
+    define,
+  });
+
+  if (!res.success) {
+    logBuildError('Failed to compile actions', res.logs);
+  }
+
+  fs.rmSync(rawActionsDir, { recursive: true });
+
+  return res;
 }
