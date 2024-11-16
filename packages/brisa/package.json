@@ -1,6 +1,6 @@
 {
   "name": "brisa",
-  "version": "0.1.5",
+  "version": "0.1.6-canary.1",
   "description": "Brisa, the next-gen web framework.",
   "repository": {
     "type": "git",
