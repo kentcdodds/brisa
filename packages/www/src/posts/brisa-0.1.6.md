@@ -6,8 +6,6 @@ author: Aral Roca
 author_site: https://x.com/aralroca
 ---
 
-# Brisa 0.1.6 Release Notes
-
 This release focuses on addressing two critical regressions introduced in the previous versions:
 
 ## Select-Option Rendering regression
@@ -16,7 +14,7 @@ We have fixed a bug that caused the select-option to render incorrectly. This is
 
 ## Hot Reload regression
 
-We have fixed some issues related to hot-reload that caused actions conflicts during hot-reload, and hot-reload was not working as expected.
+We have fixed some issues related to hot-reload that caused actions conflicts during hot-reload, and hot-reload was not working as expected. Hot reload wasn’t feeling so "hot".
 
 ## What's Changed
 
