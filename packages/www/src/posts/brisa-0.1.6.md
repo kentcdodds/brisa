@@ -8,13 +8,13 @@ author_site: https://x.com/aralroca
 
 This release focuses on addressing two critical regressions introduced in the previous versions:
 
-## Select-Option Rendering regression
+## Select-Option bug 🐛
 
-We have fixed a bug that caused the select-option to render incorrectly. This issue was introduced in the previous version and has been fixed in this release.
+We have fixed a bug that caused the select-option default selected value to not be rendered correctly.
 
-## Hot Reload regression
+## Hot reload wasn’t feeling so "hot" 🥵
 
-We have fixed some issues related to hot-reload that caused actions conflicts during hot-reload, and hot-reload was not working as expected. Hot reload wasn’t feeling so "hot".
+We have fixed some issues related to hot-reload that caused actions conflicts during hot-reload, and hot-reload was not working as expected.
 
 ## What's Changed
 
