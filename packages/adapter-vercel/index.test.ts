@@ -1,5 +1,5 @@
 import type { BrisaConstants } from 'brisa';
-import { describe, it, expect, afterEach, spyOn } from 'bun:test';
+import { describe, it, expect, afterEach, spyOn, beforeEach } from 'bun:test';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import vercelAdapter from './index';
@@ -16,18 +16,21 @@ const outDir = path.join(brisaConstants.ROOT_DIR, 'out');
 const buildDir = path.join(brisaConstants.ROOT_DIR, 'build');
 const vercelDir = path.join(brisaConstants.ROOT_DIR, '.vercel');
 const outputConfigPath = path.join(vercelDir, 'output', 'config.json');
-const logError = spyOn(console, 'error');
+let logError: ReturnType<typeof spyOn>;
 const logErrorMessage =
   'Vercel adapter only supports "node" and "static" output. Please set the "output" field in the brisa.config.ts file';
 
 describe('adapter-vercel', () => {
+  beforeEach(async () => {
+    logError = spyOn(console, 'error');
+  });
   afterEach(async () => {
     await fs.rm(vercelDir, { recursive: true, force: true });
     await fs.rm(outDir, { recursive: true, force: true });
     await fs.rm(buildDir, { recursive: true, force: true });
     process.env.VERCEL_SKEW_PROTECTION_ENABLED = undefined;
     process.env.VERCEL_DEPLOYMENT_ID = undefined;
-    logError.mockClear();
+    logError.mockRestore();
   });
   it('should name be "vercel"', () => {
     const { name } = vercelAdapter();

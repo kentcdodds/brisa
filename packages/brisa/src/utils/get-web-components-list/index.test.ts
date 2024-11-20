@@ -25,7 +25,7 @@ describe('utils', () => {
     mockConsoleLog = spyOn(console, 'log');
   });
   afterEach(() => {
-    mockConsoleLog.mockClear();
+    mockConsoleLog.mockRestore();
   });
 
   describe('getWebComponentsList', () => {

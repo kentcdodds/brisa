@@ -27,6 +27,7 @@ describe('cli/buildStandalone', () => {
   afterEach(() => {
     mockLog.mockRestore();
     mockProcessExit.mockRestore();
+    globalThis.mockConstants = undefined;
     fs.rmSync(BUILD_DIR, { recursive: true });
   });
 

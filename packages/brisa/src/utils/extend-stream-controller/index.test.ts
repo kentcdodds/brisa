@@ -21,7 +21,7 @@ const controllerParams = { controller: mockController, request };
 describe('extendStreamController', () => {
   beforeEach(() => {
     setSystemTime(new Date('2024-01-01T00:00:00.000Z'));
-    mockController.enqueue.mockClear();
+    mockController.enqueue.mockRestore();
   });
 
   it('should enqueue directly the chunks without suspenseId', () => {

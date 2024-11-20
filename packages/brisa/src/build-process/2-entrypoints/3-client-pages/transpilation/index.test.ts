@@ -1,16 +1,22 @@
-import { describe, expect, it, spyOn, afterEach } from 'bun:test';
+import { describe, expect, it, spyOn, afterEach, beforeEach } from 'bun:test';
 import clientBuildPlugin from '.';
 import { getConstants } from '@/constants';
 import { boldLog } from '@/utils/log/log-color';
 import { logsPerFile } from '@/build-process/2-entrypoints/3-client-pages/transpilation/transform-to-reactive-arrays';
 
+let mockLog: ReturnType<typeof spyOn>;
 const toInline = (s: string) => s.replace(/\s*\n\s*/g, '').replaceAll("'", '"');
 
 describe('build process', () => {
   describe('client-build-plugin', () => {
+    beforeEach(() => {
+      mockLog = spyOn(console, 'log');
+      mockLog.mockImplementation(() => {});
+    });
     afterEach(() => {
       logsPerFile.clear();
       delete globalThis.mockConstants;
+      mockLog.mockRestore();
     });
     describe('without transformation', () => {
       it('should not transform if is inside _native folder', () => {
@@ -437,9 +443,6 @@ describe('build process', () => {
 
       it('should not allow to consume web-components as server-components and log with an error', () => {
         const { LOG_PREFIX } = getConstants();
-        const mockLog = spyOn(console, 'log');
-
-        mockLog.mockImplementation(() => {});
 
         const input = `
             function Test(props) {
@@ -476,7 +479,6 @@ describe('build process', () => {
             export default brisaElement(MyComponent, ['foo', 'bar']);
           `);
         const logs = mockLog.mock.calls.slice(0);
-        mockLog.mockRestore();
         expect(output).toBe(expected);
         expect(logs[0]).toEqual([LOG_PREFIX.ERROR, `Ops! Error:`]);
         expect(logs[1]).toEqual([
@@ -1548,9 +1550,6 @@ describe('build process', () => {
 
       it('should log a warning when using spread props inside JSX that can lost the reactivity', () => {
         const { LOG_PREFIX } = getConstants();
-        const mockLog = spyOn(console, 'log');
-
-        mockLog.mockImplementation(() => {});
 
         const input = `
           export default function MyComponent(props) {
@@ -1571,7 +1570,6 @@ describe('build process', () => {
           export default brisaElement(MyComponent);
         `);
         const logs = mockLog.mock.calls.slice(0);
-        mockLog.mockRestore();
         expect(output).toBe(expected);
         expect(logs[0]).toEqual([LOG_PREFIX.WARN, `Ops! Warning:`]);
         expect(logs[1]).toEqual([
@@ -1601,10 +1599,6 @@ describe('build process', () => {
       });
 
       it('should log warning spread props inside JSX once per file', () => {
-        const mockLog = spyOn(console, 'log');
-
-        mockLog.mockImplementation(() => {});
-
         const input = `
           export default function MyComponent(props) {
             return <div {...props}><span {...props}></span></div>
@@ -1625,7 +1619,6 @@ describe('build process', () => {
         const logs = mockLog.mock.calls.slice(0);
         const numLogsEachTime = 7;
 
-        mockLog.mockRestore();
         expect(output).toBe(expected);
         expect(logs.length).toBe(numLogsEachTime);
       });
@@ -1635,10 +1628,6 @@ describe('build process', () => {
           ...getConstants(),
           IS_SERVE_PROCESS: true,
         };
-        const mockLog = spyOn(console, 'log');
-
-        mockLog.mockImplementation(() => {});
-
         const input = `
           export default function MyComponent(props) {
             return <div {...props}>Example</div>
@@ -1660,7 +1649,6 @@ describe('build process', () => {
         `);
 
         const logs = mockLog.mock.calls.slice(0);
-        mockLog.mockRestore();
 
         expect(output).toBe(expected);
         expect(logs.length).toBe(0);

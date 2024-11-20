@@ -32,12 +32,11 @@ const resultWithdDynamicRoute = {
   },
 } as const;
 
-const mockCompileAll = mock(async () => defaultResult);
-const mockTable = mock((v: any) => null);
-const mockGenerateStaticExport = mock(async () => [
-  new Map<string, string[]>(),
-]);
-const mockLog = mock((...logs: string[]) => {});
+let mockCompileAll: ReturnType<typeof mock>;
+let mockTable: ReturnType<typeof mock>;
+let mockGenerateStaticExport: ReturnType<typeof mock>;
+let mockExit: ReturnType<typeof spyOn>;
+let mockLog: ReturnType<typeof spyOn>;
 const green = (text: string) =>
   enableANSIColors ? `\x1b[32m${text}\x1b[0m` : text;
 
@@ -45,9 +44,15 @@ describe('cli', () => {
   describe('build', () => {
     beforeEach(() => {
       if (!fs.existsSync(BUILD_DIR)) fs.mkdirSync(BUILD_DIR);
-      spyOn(process, 'exit').mockImplementation(() => null as never);
-      spyOn(console, 'log').mockImplementation((...logs) => mockLog(...logs));
-      mock.module('@/utils/compile-all', () => ({
+      mockCompileAll = mock(async () => defaultResult);
+      mockTable = mock((v: any) => null);
+      mockGenerateStaticExport = mock(async () => [
+        new Map<string, string[]>(),
+      ]);
+      mockExit = spyOn(process, 'exit');
+      mockExit.mockImplementation(() => null as never);
+      mockLog = spyOn(console, 'log');
+      mock.module('@/build-process/compile-all', () => ({
         default: async () => (await mockCompileAll()) || defaultResult,
       }));
       mock.module('./build-utils', () => ({
@@ -63,6 +68,7 @@ describe('cli', () => {
       mockGenerateStaticExport.mockRestore();
       mockTable.mockRestore();
       mockLog.mockRestore();
+      mockExit.mockRestore();
       mock.restore();
       globalThis.mockConstants = undefined;
     });

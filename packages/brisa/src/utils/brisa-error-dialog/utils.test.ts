@@ -1,13 +1,16 @@
 import { getConstants } from '@/constants';
-import { describe, it, expect, afterEach, spyOn } from 'bun:test';
+import { describe, it, expect, afterEach, spyOn, beforeEach } from 'bun:test';
 import { getFilterDevRuntimeErrors } from './utils';
 
-const mockLog = spyOn(console, 'log');
+let mockLog: ReturnType<typeof spyOn>;
 
 describe('utils - brisa-error-dialog - getFilterDevRuntimeErrors', () => {
+  beforeEach(() => {
+    mockLog = spyOn(console, 'log');
+  });
   afterEach(() => {
     globalThis.mockConstants = undefined;
-    mockLog.mockClear();
+    mockLog.mockRestore();
   });
   it('should return a function if CONFIG.filterRuntimeDevErrors is a function', () => {
     globalThis.mockConstants = {

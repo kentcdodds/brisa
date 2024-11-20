@@ -433,8 +433,8 @@ describe('utils', () => {
     }
 
     beforeEach(() => {
-      mockNavigationIntercept.mockClear();
-      preventDefault.mockClear();
+      mockNavigationIntercept.mockRestore();
+      preventDefault.mockRestore();
     });
 
     afterEach(() => {
