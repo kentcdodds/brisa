@@ -1,6 +1,6 @@
 import { afterEach, describe, it, expect, mock } from 'bun:test';
 import substituteI18nRouteValues from '.';
-import constants from '@/constants';
+import { getConstants } from '@/constants';
 
 describe('utils', () => {
   afterEach(() => {
@@ -9,20 +9,18 @@ describe('utils', () => {
 
   describe('substituteI18nRouteValues', () => {
     it('should translate the pathname', () => {
-      mock.module('@/constants', () => ({
-        default: () => ({
-          ...constants,
-          I18N_CONFIG: {
-            locales: ['es', 'en'],
-            defaultLocale: 'es',
-            pages: {
-              '/example/[id]': {
-                es: '/ejemplo/[id]',
-              },
+      globalThis.mockConstants = {
+        ...getConstants(),
+        I18N_CONFIG: {
+          locales: ['es', 'en'],
+          defaultLocale: 'es',
+          pages: {
+            '/example/[id]': {
+              es: '/ejemplo/[id]',
             },
           },
-        }),
-      }));
+        },
+      };
 
       const output = substituteI18nRouteValues(
         '/example/[id]',
@@ -33,20 +31,18 @@ describe('utils', () => {
     });
 
     it('should work with dynamic routes and catchAll routes', () => {
-      mock.module('@/constants', () => ({
-        default: () => ({
-          ...constants,
-          I18N_CONFIG: {
-            locales: ['es', 'en'],
-            defaultLocale: 'es',
-            pages: {
-              '/example/[id]/settings/[[...catchAll]]': {
-                es: '/ejemplo/[id]/configuracion/[[...catchAll]]',
-              },
+      globalThis.mockConstants = {
+        ...getConstants(),
+        I18N_CONFIG: {
+          locales: ['es', 'en'],
+          defaultLocale: 'es',
+          pages: {
+            '/example/[id]/settings/[[...catchAll]]': {
+              es: '/ejemplo/[id]/configuracion/[[...catchAll]]',
             },
           },
-        }),
-      }));
+        },
+      };
 
       const output = substituteI18nRouteValues(
         '/example/[id]/settings/[[...catchAll]]',
@@ -57,20 +53,18 @@ describe('utils', () => {
     });
 
     it('should work with params and hash routes', () => {
-      mock.module('@/constants', () => ({
-        default: () => ({
-          ...constants,
-          I18N_CONFIG: {
-            locales: ['es', 'en'],
-            defaultLocale: 'es',
-            pages: {
-              '/example': {
-                es: '/ejemplo',
-              },
+      globalThis.mockConstants = {
+        ...getConstants(),
+        I18N_CONFIG: {
+          locales: ['es', 'en'],
+          defaultLocale: 'es',
+          pages: {
+            '/example': {
+              es: '/ejemplo',
             },
           },
-        }),
-      }));
+        },
+      };
 
       const output = substituteI18nRouteValues(
         '/example',

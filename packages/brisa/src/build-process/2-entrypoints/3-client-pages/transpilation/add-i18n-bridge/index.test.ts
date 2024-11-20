@@ -19,18 +19,17 @@ const I18N_CONFIG = {
   pages: {},
 };
 
-mock.module('@/constants', () => ({
-  default: { I18N_CONFIG },
-}));
-
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 const emptyAst = parseCodeToAST('');
 
 describe('build process', () => {
   beforeEach(() => {
-    mock.module('@/constants', () => ({
-      default: { I18N_CONFIG },
-    }));
+    globalThis.mockConstants = {
+      I18N_CONFIG,
+    } as any;
+  });
+  afterEach(() => {
+    globalThis.mockConstants = undefined;
   });
   describe('client-build-plugin', () => {
     describe('add-i18n-bridge', () => {
@@ -332,30 +331,28 @@ describe('build process', () => {
       });
 
       it('should import the i18n pages when config.transferToClient is true', () => {
-        mock.module('@/constants', () => ({
-          default: {
-            I18N_CONFIG: {
-              ...I18N_CONFIG,
-              pages: {
-                config: {
-                  transferToClient: true,
-                },
-                '/about-us': {
-                  en: '/about-us/',
-                  es: '/sobre-nosotros/',
-                },
-                '/user/[username]': {
-                  en: '/user/[username]',
-                  es: '/usuario/[username]',
-                },
-                '/somepage': {
-                  en: '/somepage',
-                  es: '/alguna-pagina',
-                },
+        globalThis.mockConstants = {
+          I18N_CONFIG: {
+            ...I18N_CONFIG,
+            pages: {
+              config: {
+                transferToClient: true,
               },
-            } as I18nConfig,
-          },
-        }));
+              '/about-us': {
+                en: '/about-us/',
+                es: '/sobre-nosotros/',
+              },
+              '/user/[username]': {
+                en: '/user/[username]',
+                es: '/usuario/[username]',
+              },
+              '/somepage': {
+                en: '/somepage',
+                es: '/alguna-pagina',
+              },
+            },
+          } as I18nConfig,
+        };
 
         const ast = addI18nBridge(emptyAst, {
           usei18nKeysLogic: false,
@@ -387,30 +384,28 @@ describe('build process', () => {
       });
 
       it('should import the i18n pages when config.transferToClient is an array', () => {
-        mock.module('@/constants', () => ({
-          default: {
-            I18N_CONFIG: {
-              ...I18N_CONFIG,
-              pages: {
-                config: {
-                  transferToClient: ['/about-us', '/user/[username]'],
-                },
-                '/about-us': {
-                  en: '/about-us/',
-                  es: '/sobre-nosotros/',
-                },
-                '/user/[username]': {
-                  en: '/user/[username]',
-                  es: '/usuario/[username]',
-                },
-                '/somepage': {
-                  en: '/somepage',
-                  es: '/alguna-pagina',
-                },
+        globalThis.mockConstants = {
+          I18N_CONFIG: {
+            ...I18N_CONFIG,
+            pages: {
+              config: {
+                transferToClient: ['/about-us', '/user/[username]'],
               },
-            } as I18nConfig,
-          },
-        }));
+              '/about-us': {
+                en: '/about-us/',
+                es: '/sobre-nosotros/',
+              },
+              '/user/[username]': {
+                en: '/user/[username]',
+                es: '/usuario/[username]',
+              },
+              '/somepage': {
+                en: '/somepage',
+                es: '/alguna-pagina',
+              },
+            },
+          } as I18nConfig,
+        };
 
         const ast = addI18nBridge(emptyAst, {
           usei18nKeysLogic: false,
@@ -438,22 +433,20 @@ describe('build process', () => {
       });
 
       it('should add interpolation.format function on the client-side', () => {
-        mock.module('@/constants', () => ({
-          default: {
-            I18N_CONFIG: {
-              ...I18N_CONFIG,
-              interpolation: {
-                format: (value, formatName, lang) => {
-                  if (formatName === 'uppercase') {
-                    return (value as string).toUpperCase();
-                  }
-                  if (formatName === 'lang') return lang;
-                  return value;
-                },
+        globalThis.mockConstants = {
+          I18N_CONFIG: {
+            ...I18N_CONFIG,
+            interpolation: {
+              format: (value, formatName, lang) => {
+                if (formatName === 'uppercase') {
+                  return (value as string).toUpperCase();
+                }
+                if (formatName === 'lang') return lang;
+                return value;
               },
-            } as I18nConfig,
-          },
-        }));
+            },
+          } as I18nConfig,
+        };
 
         const ast = addI18nBridge(emptyAst, {
           usei18nKeysLogic: true,

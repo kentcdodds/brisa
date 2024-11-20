@@ -1,8 +1,8 @@
-import constants from '@/constants';
 import AST from '@/utils/ast';
 import { TRANSLATE_CORE_IMPORT } from '@/build-process/2-entrypoints/3-client-pages/transpilation/constants';
 import transferTranslatedPagePaths from '@/utils/transfer-translated-page-paths';
 import type { ESTree } from 'meriyah';
+import { getConstants } from '@/constants';
 
 const { parseCodeToAST } = AST('tsx');
 
@@ -12,7 +12,8 @@ type I18nBridgeConfig = {
   i18nAdded: boolean;
 };
 
-const i18nKeysLogic = (configText = 'i18nConfig') => {
+function i18nKeysLogic(configText = 'i18nConfig') {
+  const constants = getConstants();
   const formatters =
     typeof constants.I18N_CONFIG?.interpolation?.format === 'function'
       ? `interpolation: {...i18nConfig.interpolation, format:${constants.I18N_CONFIG.interpolation?.format.toString()}},`
@@ -29,7 +30,7 @@ const i18nKeysLogic = (configText = 'i18nConfig') => {
     return p.then?.(a) ?? a(p);
   }
 `;
-};
+}
 
 export default function addI18nBridge(
   ast: ESTree.Program,
@@ -37,6 +38,7 @@ export default function addI18nBridge(
 ) {
   if (i18nAdded && isTranslateCoreAdded) return ast;
 
+  const constants = getConstants();
   const i18nConfig = JSON.stringify({
     ...constants.I18N_CONFIG,
     messages: undefined,
