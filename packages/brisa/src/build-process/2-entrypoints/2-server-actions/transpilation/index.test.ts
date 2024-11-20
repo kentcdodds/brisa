@@ -18,7 +18,7 @@ function buildActions(code: string) {
 }
 
 const brisaServerFile = path
-  .join(import.meta.dirname, '..', '..', '..', 'server', 'index.js')
+  .join(import.meta.dirname, '..', '..', '..', '..', '..', 'server', 'index.js')
   .replace(/\\/g, '\\\\');
 
 describe('utils', () => {

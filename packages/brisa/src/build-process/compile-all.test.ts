@@ -12,7 +12,7 @@ import path from 'node:path';
 import compileAll from './compile-all';
 import { getConstants } from '@/constants';
 
-const ROOT_DIR = path.join(import.meta.dir, '..', '..', '__fixtures__');
+const ROOT_DIR = path.join(import.meta.dir, '..', '__fixtures__');
 const PAGES_DIR = path.join(ROOT_DIR, 'pages');
 const ASSETS_DIR = path.join(ROOT_DIR, 'public');
 const OUT_DIR = path.join(ROOT_DIR, 'out');

@@ -8,6 +8,7 @@ const assetsPath = path.join(
   import.meta.dir,
   '..',
   '..',
+  '..',
   '__fixtures__',
   'public',
 );

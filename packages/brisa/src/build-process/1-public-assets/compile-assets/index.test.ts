@@ -5,7 +5,7 @@ import compileAssets from '.';
 import { getConstants } from '@/constants';
 import { toInline } from '@/helpers';
 
-const SRC_DIR = path.join(import.meta.dir, '..', '..', '__fixtures__');
+const SRC_DIR = path.join(import.meta.dir, '..', '..', '..', '__fixtures__');
 const BUILD_DIR = path.join(SRC_DIR, 'build');
 const PAGES_DIR = path.join(BUILD_DIR, 'pages');
 const ASSETS_DIR = path.join(BUILD_DIR, 'public');
@@ -80,7 +80,7 @@ describe('compileAssets', () => {
       ['favicon.ico', 'some-dir', 'user'].toSorted(),
     );
     expect(log).not.toHaveBeenCalled();
-    log.mockClear();
+    log.mockRestore();
   });
 
   it('should not compress fixtures assets if assetCompression is false', async () => {
@@ -116,6 +116,6 @@ describe('compileAssets', () => {
       `),
     );
     expect(log.mock.calls.toString()).toContain('sitemap.xml generated in');
-    log.mockClear();
+    log.mockRestore();
   });
 });

@@ -7,7 +7,7 @@ import buildPage from '.';
 import { getConstants } from '@/constants';
 import getWebComponentsList from '@/utils/get-web-components-list';
 
-const src = path.join(import.meta.dir, '..', '..', '__fixtures__');
+const src = path.join(import.meta.dir, '..', '..', '..', '..', '__fixtures__');
 const webComponentsDir = path.join(src, 'web-components');
 const build = path.join(src, `out-${crypto.randomUUID()}}`);
 const brisaInternals = path.join(build, '_brisa');
@@ -47,7 +47,7 @@ describe('build-process -> entrypoints -> client-pages -> build-page', () => {
     globalThis.mockConstants = undefined;
   });
 
-  describe('getClientCodeInPage', () => {
+  describe('buildClientPage', () => {
     it('should not return client code in page without web components, without suspense, without server actions', async () => {
       const pagePath = path.join(pages, 'somepage.tsx');
       const output = await buildPage({ pagePath, allWebComponents });

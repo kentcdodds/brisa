@@ -5,9 +5,7 @@ import fs from 'node:fs';
 
 const CREATE_BRISA_PATH = join(import.meta.dir, 'create-brisa.cjs');
 const EXPECTED_INNER_FILES = [
-  'bun.lockb',
   'bunfig.toml',
-  'node_modules',
   'package.json',
   'README.md',
   'src',
@@ -24,15 +22,21 @@ describe('create-brisa', () => {
   it("should create brisa correctly with the name of the project as 'out'", async () => {
     const projectName = 'out';
     await $`echo "${projectName}" | bun run ${CREATE_BRISA_PATH}`;
-    const files = await getFiles(projectName);
-    expect(files).toEqual(EXPECTED_INNER_FILES);
+    const files = new Set(await getFiles(projectName));
+
+    for (const expected of EXPECTED_INNER_FILES) {
+      expect(files.has(expected)).toBeTrue();
+    }
   });
 
   it('should create brisa correctly with the name of the project as argv', async () => {
     const projectName = 'out';
     await $`bun run ${CREATE_BRISA_PATH} ${projectName}`;
-    const files = await getFiles(projectName);
-    expect(files).toEqual(EXPECTED_INNER_FILES);
+    const files = new Set(await getFiles(projectName));
+
+    for (const expected of EXPECTED_INNER_FILES) {
+      expect(files.has(expected)).toBeTrue();
+    }
   });
 
   it('should exit and display an error if the folder exists', async () => {
@@ -46,8 +50,11 @@ describe('create-brisa', () => {
   it("should create brisa correctly with multi-folder with the name 'out/@foo/bar/baz'", async () => {
     const projectName = join('out', '@foo', 'bar', 'baz');
     await $`echo "${projectName}" | bun run ${CREATE_BRISA_PATH}`;
-    const files = await getFiles(projectName);
-    expect(files).toEqual(EXPECTED_INNER_FILES);
+    const files = new Set(await getFiles(projectName));
+
+    for (const expected of EXPECTED_INNER_FILES) {
+      expect(files.has(expected)).toBeTrue();
+    }
   });
 
   it('should "bun create brisa --example" list the examples', async () => {

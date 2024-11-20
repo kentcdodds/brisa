@@ -32,7 +32,16 @@ function defineBrisaWebComponent(code: string, path: string) {
 
 async function getContextProviderCode() {
   const code = await Bun.file(
-    join(import.meta.dir, '..', 'context-provider', 'client.tsx'),
+    join(
+      import.meta.dir,
+      '..',
+      '..',
+      '..',
+      '..',
+      'utils',
+      'context-provider',
+      'client.tsx',
+    ),
   ).text();
   return code.replace(/import.*\n/g, '');
 }
