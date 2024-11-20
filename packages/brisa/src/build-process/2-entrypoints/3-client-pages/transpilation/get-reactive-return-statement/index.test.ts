@@ -6,7 +6,7 @@ import AST from '@/utils/ast';
 
 const { parseCodeToAST, generateCodeFromAST } = AST();
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('get-reactive-return-statement', () => {
       it('should return the reactive return statement', () => {

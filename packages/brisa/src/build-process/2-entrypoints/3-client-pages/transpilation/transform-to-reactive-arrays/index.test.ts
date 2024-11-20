@@ -10,7 +10,7 @@ const { parseCodeToAST, generateCodeFromAST } = AST();
 const toOutputCode = (ast: ESTree.Program) =>
   normalizeHTML(generateCodeFromAST(ast));
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('transform-to-reactive-arrays', () => {
       it('should transform JSX to an array if is not a web-component', () => {

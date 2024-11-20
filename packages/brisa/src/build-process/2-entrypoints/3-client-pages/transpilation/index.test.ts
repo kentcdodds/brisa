@@ -6,7 +6,7 @@ import { logsPerFile } from '@/build-process/2-entrypoints/3-client-pages/transp
 
 const toInline = (s: string) => s.replace(/\s*\n\s*/g, '').replaceAll("'", '"');
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     afterEach(() => {
       logsPerFile.clear();

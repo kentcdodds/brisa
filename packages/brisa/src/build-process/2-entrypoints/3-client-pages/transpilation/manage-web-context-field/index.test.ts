@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import manageWebContextField from '.';
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('manage-web-context-field', () => {
       it("should add the 'effect' variable", () => {

@@ -7,7 +7,7 @@ import { describe, expect, it } from 'bun:test';
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 const PROPS_OPTIMIZATION_IDENTIFIER = '__b_props__';
 
-describe('client-build-plugin/skip-prop-transformation', () => {
+describe('build process -> client-build-plugin -> skip-prop-transformation', () => {
   describe('VariableDeclaration in component body', () => {
     it('should not skip anything in same level of component body', () => {
       const code = `

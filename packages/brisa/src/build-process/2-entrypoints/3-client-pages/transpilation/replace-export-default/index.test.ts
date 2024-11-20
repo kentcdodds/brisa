@@ -2,8 +2,8 @@ import { describe, expect, it } from 'bun:test';
 import replaceExportDefault from '.';
 import type { ESTree } from 'meriyah';
 
-describe('client-build-plugin', () => {
-  describe('utils', () => {
+describe('build process', () => {
+  describe('client-build-plugin', () => {
     describe('replace-export-default', () => {
       it('should replace the default export of the AST to a variable name', () => {
         const ast = {

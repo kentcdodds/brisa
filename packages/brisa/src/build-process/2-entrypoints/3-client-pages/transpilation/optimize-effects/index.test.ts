@@ -20,7 +20,7 @@ const toOutput = (code: string) => {
   return normalizeHTML(generateCodeFromAST(reactiveAst));
 };
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('optimize-effects', () => {
       it('should not do any transformation if not the effect in webContext', () => {

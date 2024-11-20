@@ -12,7 +12,7 @@ const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 const output = (ast: any) =>
   normalizeHTML(generateCodeFromAST(ast as unknown as ESTree.Program));
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('defineBrisaElement', () => {
       it('should exist all the import declarations from brisa/client', () => {

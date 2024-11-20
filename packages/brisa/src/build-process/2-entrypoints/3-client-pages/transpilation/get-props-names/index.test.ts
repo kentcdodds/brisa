@@ -7,7 +7,7 @@ import getWebComponentAst from '@/build-process/2-entrypoints/3-client-pages/tra
 const { parseCodeToAST } = AST('tsx');
 const inputCode = (code: string) => getWebComponentAst(parseCodeToAST(code));
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('getPropsNames', () => {
       it('should return an empty array if there is no props', () => {

@@ -6,7 +6,7 @@ import AST from '@/utils/ast';
 
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('get-web-component-ast', () => {
       it('should not return the web component if there are no default export', () => {

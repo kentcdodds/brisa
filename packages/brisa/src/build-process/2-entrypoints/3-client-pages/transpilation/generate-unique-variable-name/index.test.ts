@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import generateUniqueVariableName from '.';
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('generateUniqueVariableName', () => {
       it('should return a unique variable names', () => {

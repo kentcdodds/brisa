@@ -5,7 +5,7 @@ import getVariableNames from '.';
 
 const { parseCodeToAST } = AST();
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('get-component-variable-names', () => {
       it('should register the names of all variables inside the web-component', () => {

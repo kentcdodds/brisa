@@ -5,7 +5,7 @@ import defineCustomElementToAST from '.';
 
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 
-describe('utils/client-build-plugin/define-custom-element-to-ast', () => {
+describe('build process -> client-build-plugin -> define-custom-element-to-ast', () => {
   it('should define the custom element and remove the export default', () => {
     const ast = parseCodeToAST(`
       import {Component} from 'brisa';

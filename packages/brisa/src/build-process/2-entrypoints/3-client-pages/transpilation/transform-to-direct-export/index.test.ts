@@ -5,7 +5,7 @@ import AST from '@/utils/ast';
 
 const { parseCodeToAST, generateCodeFromAST } = AST();
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('transform-to-direct-export', () => {
       it('should add an "export default null" if there is no default export', () => {

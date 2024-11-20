@@ -4,7 +4,7 @@ import { normalizeHTML } from '@/helpers';
 
 /**
  * This test is necessary only to know that it has been integrated correctly, but all tests on
- * the transpilation are inside `client-build-plugin`.
+ * the transpilation are inside build-process -> 2-entrypoints -> 3-client-pages -> transpilation.
  */
 describe('utils/compile-wc', () => {
   it('should transpile the code of a web component to be used in the browser', () => {

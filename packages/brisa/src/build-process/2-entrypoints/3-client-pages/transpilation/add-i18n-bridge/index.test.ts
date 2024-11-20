@@ -26,7 +26,7 @@ mock.module('@/constants', () => ({
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 const emptyAst = parseCodeToAST('');
 
-describe('utils', () => {
+describe('build process', () => {
   beforeEach(() => {
     mock.module('@/constants', () => ({
       default: { I18N_CONFIG },

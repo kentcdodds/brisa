@@ -6,7 +6,7 @@ import AST from '@/utils/ast';
 const { parseCodeToAST, generateCodeFromAST } = AST('tsx');
 const toOutput = (ast: any) => normalizeHTML(generateCodeFromAST(ast));
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('map-component-statics', () => {
       it('should be possible to map statics using arrow functions', () => {

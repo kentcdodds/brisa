@@ -29,7 +29,7 @@ const PARAMS = [
   '{bar: {foo = baz => true}}',
 ];
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('transform-to-reactive-props', () => {
       it('should transform all props inside the web-component to reactive props', () => {

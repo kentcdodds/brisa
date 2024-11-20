@@ -18,7 +18,7 @@ const toOutput = (code: string) => {
   return normalizeHTML(generateCodeFromAST(reactiveAst));
 };
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('merge-early-returns-in-one', () => {
       it("should not merge when an if doesn't have a return statement", () => {

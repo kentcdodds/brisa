@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test';
 import wrapWithArrowFn from '.';
 import type { ESTree } from 'meriyah';
 
-describe('utils', () => {
+describe('build process', () => {
   describe('client-build-plugin', () => {
     describe('wrap-with-arrow-fn', () => {
       it('should wrap the node with an arrow function', () => {
