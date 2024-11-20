@@ -4,7 +4,7 @@ import { getConstants } from '@/constants';
 import { logError } from '@/utils/log/log-build';
 import { getWebComponentListFromFilePaths } from '@/utils/get-web-components-list';
 import getDefinedEnvVar from '@/utils/get-defined-env-var';
-import clientBuildPlugin from '@/utils/client-build-plugin';
+import clientBuildPlugin from '@/build-process/2-entrypoints/3-client-pages/transpilation';
 import createContextPlugin from '@/utils/create-context/create-context-plugin';
 import serverComponentPlugin from '@/utils/server-component-plugin';
 import type { BuildOutput } from 'bun';

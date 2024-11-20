@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import compileAll from '@/utils/compile-all';
+import compileAll from '@/build-process/compile-all';
 import { getConstants } from '@/constants';
 import byteSizeToString from '@/utils/byte-size-to-string';
 import { logTable, generateStaticExport } from './build-utils';

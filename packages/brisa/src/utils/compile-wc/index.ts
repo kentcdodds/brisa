@@ -1,4 +1,4 @@
-import clientBuildPlugin from '../client-build-plugin';
+import clientBuildPlugin from '@/build-process/2-entrypoints/3-client-pages/transpilation';
 
 /**
  * This function is very similar to clientBuildPlugin, with the difference that

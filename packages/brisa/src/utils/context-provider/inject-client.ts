@@ -1,5 +1,5 @@
 import path from 'node:path';
-import clientBuildPlugin from '@/utils/client-build-plugin';
+import clientBuildPlugin from '@/build-process/2-entrypoints/3-client-pages/transpilation';
 import { logBuildError } from '@/utils/log/log-build';
 
 // Should be used via macro

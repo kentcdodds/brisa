@@ -4,7 +4,7 @@ import { logError, logWarning } from '@/utils/log/log-build';
 import {
   ALTERNATIVE_PREFIX,
   NATIVE_FOLDER,
-} from '@/utils/client-build-plugin/constants';
+} from '@/build-process/2-entrypoints/3-client-pages/transpilation/constants';
 import isTestFile from '@/utils/is-test-file';
 import { getEntrypointsRouter } from '@/utils/get-entrypoints';
 import resolveImportSync from '@/utils/resolve-import-sync';

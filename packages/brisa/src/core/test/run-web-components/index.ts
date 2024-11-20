@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import fs from 'node:fs';
 import { getConstants } from '@/constants';
-import { transformToWebComponents } from '@/utils/get-client-code-in-page';
+import { transformToWebComponents } from '@/build-process/2-entrypoints/3-client-pages/build-page';
 import getWebComponentsList from '@/utils/get-web-components-list';
 import getImportableFilepath from '@/utils/get-importable-filepath';
 
