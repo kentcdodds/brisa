@@ -205,11 +205,7 @@ describe('utils', () => {
     it('should send the store in the response', async () => {
       window._S = [['a', 'b']];
 
-      window._s = {
-        Map: new Map(window._S),
-        get: (key: string) => window._s.Map.get(key),
-        set: (key: string, value: any) => window._s.Map.set(key, value),
-      };
+      await initStore();
 
       window._s.set('c', 'd');
 
@@ -267,12 +263,7 @@ describe('utils', () => {
     });
 
     it('should add and remove the class "brisa-request" meanwhile the request is being processed and then fail req.ok === false', async () => {
-      window._s = {
-        Map: new Map(),
-        get: (key: string) => window._s.Map.get(key),
-        set: (key: string, value: any) => window._s.Map.set(key, value),
-      };
-
+      await initStore();
       await simulateRPC({
         navigateTo: 'http://localhost/some-page',
         useIndicator: true,
@@ -292,12 +283,7 @@ describe('utils', () => {
     });
 
     it('should add and remove the class "brisa-request" meanwhile the request is being processed and then fail throwing an error', async () => {
-      window._s = {
-        Map: new Map(),
-        get: (key: string) => window._s.Map.get(key),
-        set: (key: string, value: any) => window._s.Map.set(key, value),
-      };
-
+      await initStore();
       await simulateRPC({
         navigateTo: 'http://localhost/some-page',
         useIndicator: true,
@@ -316,11 +302,7 @@ describe('utils', () => {
     });
 
     it('should communicate with store to the indicator store key', async () => {
-      window._s = {
-        Map: new Map(),
-        get: (key: string) => window._s.Map.get(key),
-        set: (key: string, value: any) => window._s.Map.set(key, value),
-      };
+      await initStore();
 
       expect(window._s.get(INDICATOR_ID)).toBeEmpty();
 
@@ -644,3 +626,9 @@ describe('utils', () => {
     });
   });
 });
+
+async function initStore() {
+  // Init Store
+  delete require.cache[require.resolve('../signals')];
+  await import('../signals');
+}

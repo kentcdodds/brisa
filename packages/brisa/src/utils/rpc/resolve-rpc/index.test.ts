@@ -10,10 +10,11 @@ let resolveRPC: (
 const dataSet = { cid: '123' };
 const decoder = new TextDecoder();
 
-async function initBrowser() {
+async function initBrowser({ withStore } = { withStore: true }) {
   GlobalRegistrator.register();
   await import('.');
   resolveRPC = window._rpc;
+  if (withStore) await initStore();
 }
 
 describe('utils', () => {
@@ -93,16 +94,9 @@ describe('utils', () => {
       });
 
       await initBrowser();
-      // Init store
-      window._s = {
-        Map: new Map(),
-        get: (key: string) => window._s.Map.get(key),
-        set: (key: string, value: any) => window._s.Map.set(key, value),
-      };
-
       await resolveRPC(res, dataSet);
 
-      expect(window._s.get('foo')).toBe('bar');
+      expect(window._s.Map.get('foo')).toBe('bar');
     });
 
     it('should update the store without initialize (no signals, only server store with transferToClient)', async () => {
@@ -114,7 +108,7 @@ describe('utils', () => {
 
       let error = false;
 
-      await initBrowser();
+      await initBrowser({ withStore: false });
       await resolveRPC(res, dataSet).catch(() => {
         error = true;
       });
@@ -133,7 +127,7 @@ describe('utils', () => {
 
       let error = false;
 
-      await initBrowser();
+      await initBrowser({ withStore: false });
       await resolveRPC(res, dataSet).catch(() => {
         error = true;
       });
@@ -701,8 +695,6 @@ describe('utils', () => {
       });
 
       await initBrowser();
-      window._s = newStore();
-
       await resolveRPC(res, dataSet);
 
       const options = mockDiff.mock.calls[0][2];
@@ -711,7 +703,7 @@ describe('utils', () => {
       nodeToIgnore.innerHTML = '[["foo", "bar"]]';
 
       expect(options.shouldIgnoreNode(nodeToIgnore)).toBe(true);
-      expect(window._s.get('foo')).toBe('bar');
+      expect(window._s.Map.get('foo')).toBe('bar');
     });
 
     it('should ignore the node with id "S" and update the store with currentComponent', async () => {
@@ -730,8 +722,6 @@ describe('utils', () => {
       });
 
       await initBrowser();
-      window._s = newStore();
-
       await resolveRPC(res, dataSet);
 
       const options = mockDiff.mock.calls[0][2];
@@ -740,7 +730,7 @@ describe('utils', () => {
       nodeToIgnore.innerHTML = '[["foo", "bar"]]';
 
       expect(options.shouldIgnoreNode(nodeToIgnore)).toBe(true);
-      expect(window._s.get('foo')).toBe('bar');
+      expect(window._s.Map.get('foo')).toBe('bar');
     });
 
     it('should ignore the node with id "S" and update the store with page', async () => {
@@ -759,8 +749,6 @@ describe('utils', () => {
       });
 
       await initBrowser();
-      window._s = newStore();
-
       await resolveRPC(res, dataSet);
 
       const options = mockDiff.mock.calls[0][2];
@@ -769,7 +757,7 @@ describe('utils', () => {
       nodeToIgnore.innerHTML = '[["foo", "bar"]]';
 
       expect(options.shouldIgnoreNode(nodeToIgnore)).toBe(true);
-      expect(window._s.get('foo')).toBe('bar');
+      expect(window._s.Map.get('foo')).toBe('bar');
     });
 
     it('should NOT call "shouldIgnoreNode" returning a JSON response', async () => {
@@ -792,13 +780,8 @@ describe('utils', () => {
   });
 });
 
-function newStore() {
-  const store = new Map();
-  return {
-    get: (key: string) => store.get(key),
-    set: (key: string, value: any) => store.set(key, value),
-    delete: (key: string) => store.delete(key),
-    has: (key: string) => store.has(key),
-    Map: store,
-  };
+async function initStore() {
+  // Init Store
+  delete require.cache[require.resolve('../../signals')];
+  await import('../../signals');
 }
