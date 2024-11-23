@@ -79,6 +79,7 @@ export default async function compileFiles() {
   const { success, logs, outputs } = await Bun.build({
     entrypoints,
     outdir: BUILD_DIR,
+    experimentalCss: true,
     sourcemap: IS_PRODUCTION ? undefined : 'inline',
     root: SRC_DIR,
     target: isNode ? 'node' : 'bun',
@@ -145,7 +146,7 @@ export default async function compileFiles() {
     ),
   });
 
-  if (!success) return { success, logs, pagesSize: {} };
+  if (!success) return { success, logs, pagesSize: {}, outputs };
 
   if (actionsEntrypoints.length) {
     const actionResult = await buildActions({ actionsEntrypoints, define });
@@ -173,11 +174,12 @@ export default async function compileFiles() {
           | ResolveMessage,
       ],
       pagesSize,
+      outputs,
     };
   }
 
   if (!IS_PRODUCTION || IS_STATIC_EXPORT) {
-    return { success, logs, pagesSize };
+    return { success, logs, pagesSize, outputs };
   }
 
   const [generated] = (await generateStaticExport()) ?? [new Map()];
@@ -255,7 +257,7 @@ export default async function compileFiles() {
   console.log(LOG_PREFIX.INFO, 'Φ  JS shared by all');
   console.log(LOG_PREFIX.INFO);
 
-  return { success, logs, pagesSize: pagesSize };
+  return { success, logs, pagesSize: pagesSize, outputs };
 }
 
 async function compileClientCodePage(
