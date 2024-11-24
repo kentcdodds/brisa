@@ -2,7 +2,7 @@ import { toInline } from '@/helpers';
 import { Fragment as BrisaFragment } from '@/jsx-runtime';
 import type { RequestContext } from '@/types';
 import { getConstants } from '@/constants';
-import dangerHTML from '../danger-html';
+import dangerHTML from '@/utils/danger-html';
 
 export const AVOID_DECLARATIVE_SHADOW_DOM_SYMBOL = Symbol.for(
   'AVOID_DECLARATIVE_SHADOW_DOM',

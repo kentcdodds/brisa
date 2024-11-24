@@ -1,1 +1,1 @@
-export { default as compileWC } from '@/utils/compile-wc';
+export { default as compileWC } from '@/utils-build/compile-wc';

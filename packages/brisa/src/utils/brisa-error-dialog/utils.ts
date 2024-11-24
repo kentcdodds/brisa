@@ -1,5 +1,5 @@
 import { getConstants } from '@/constants';
-import { logWarning } from '../log/log-build';
+import { logWarning } from '@/utils/log/log-build';
 
 export function getFilterDevRuntimeErrors() {
   const { CONFIG } = getConstants();

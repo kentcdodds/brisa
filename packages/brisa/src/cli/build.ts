@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import compileAll from '@/utils/compile-all';
+import compileAll from '@/utils-build/compile-all';
 import { getConstants } from '@/constants';
 import byteSizeToString from '@/utils/byte-size-to-string';
 import { logTable, generateStaticExport } from './build-utils';
-import compileBrisaInternalsToDoBuildPortable from '@/utils/compile-serve-internals-into-build';
+import compileBrisaInternalsToDoBuildPortable from '@/utils-build/compile-serve-internals-into-build';
 
 const outputText = {
   bun: 'Bun.js Web Service App',

@@ -50,7 +50,7 @@ describe('cli', () => {
       mock.module('@/utils/compile-all', () => ({
         default: async () => (await mockCompileAll()) || defaultResult,
       }));
-      mock.module('./build-utils', () => ({
+      mock.module('./utils-build', () => ({
         logTable: (v: any) => mockTable(v),
         generateStaticExport: async () =>
           (await mockGenerateStaticExport()) || [new Map<string, string[]>()],

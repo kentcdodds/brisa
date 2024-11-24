@@ -1,4 +1,4 @@
-import generateStaticExportOriginal from '@/utils/generate-static-export';
+import generateStaticExportOriginal from '@/utils-build/generate-static-export';
 import * as logModule from '@/utils/log/log-build';
 
 // TODO: It is a workaround to avoid flaky tests, since it

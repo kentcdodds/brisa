@@ -2,11 +2,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { getConstants } from '@/constants';
 import { logError } from '@/utils/log/log-build';
-import { getWebComponentListFromFilePaths } from '@/utils/get-web-components-list';
-import getDefinedEnvVar from '@/utils/get-defined-env-var';
-import clientBuildPlugin from '@/utils/client-build-plugin';
-import createContextPlugin from '@/utils/create-context/create-context-plugin';
-import serverComponentPlugin from '@/utils/server-component-plugin';
+import { getWebComponentListFromFilePaths } from '@/utils-build/get-web-components-list';
+import getDefinedEnvVar from '@/utils-build/get-defined-env-var';
+import clientBuildPlugin from '@/utils-build/client-build-plugin';
+import createContextPlugin from '@/utils-build/create-context-plugin';
+import serverComponentPlugin from '@/utils-build/server-component-plugin';
 import type { BuildOutput } from 'bun';
 import byteSizeToString from '@/utils/byte-size-to-string';
 

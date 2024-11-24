@@ -1,5 +1,5 @@
 import type { RequestContext } from '@/types';
-import { logError } from '../log/log-build';
+import { logError } from '@/utils/log/log-build';
 
 export default function feedbackError(error: Error, req?: RequestContext) {
   if (error.name === 'ERR_DLOPEN_FAILED') {

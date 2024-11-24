@@ -1,4 +1,4 @@
-import { jsxDEV, jsx, Fragment } from './utils/ast/constants';
+import { jsxDEV, jsx, Fragment } from '@/utils-build/ast/constants';
 
 export const toInline = (s: string) => s.replace(/\s*\n\s*/g, '');
 export const normalizeHTML = (s: string) =>
