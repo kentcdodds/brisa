@@ -57,6 +57,15 @@ export default function Footer() {
                 <RSSIcon />
               </a>
             </li>
+            <li>
+              <a
+                title="Shop"
+                target="_blank"
+                href="https://brisadotbuild.myspreadshop.es/"
+              >
+                Visit our Shop
+              </a>
+            </li>
           </ul>
         </div>
         <div>
