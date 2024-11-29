@@ -19,6 +19,7 @@ packages/brisa/compiler/
 packages/brisa/macros/
 packages/brisa/build
 packages/brisa/test
+packages/**/bun.lockb
 
 # Docs
 mydb.sqlite

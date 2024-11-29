@@ -2,6 +2,7 @@ import CopyBox from '@/components/copy-box';
 import { RenderCode } from '@/helpers/markdown-loader';
 import GitHubIcon from '@/icons/github-icon';
 import VideoIcon from '@/icons/video-icon';
+import ExternalArrowIcon from '@/icons/external-arrow-icon';
 
 const fastAppsCode = `
 // src/pages/index.tsx
@@ -309,15 +310,27 @@ export default function Homepage() {
               from the community. We will send a <b>T-shirt gift</b> to the
               first contributors who help us improve the framework.
             </p>
-            <a
-              class="cta"
-              href="https://github.com/brisa-build/brisa"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <GitHubIcon style={{ marginRight: '5px' }} />
-              GitHub
-            </a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <a
+                class="cta"
+                href="https://github.com/brisa-build/brisa"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitHubIcon style={{ marginRight: '5px' }} />
+                GitHub
+              </a>
+              <a
+                title="Shop"
+                class="cta"
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://brisadotbuild.myspreadshop.es/"
+              >
+                <span style={{ marginRight: '5px' }}>Visit our Shop</span>
+                <ExternalArrowIcon />
+              </a>
+            </div>
           </div>
           <div class="code" style={{ padding: '0 80px' }}>
             <img
