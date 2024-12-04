@@ -74,7 +74,7 @@ const multiPlatformCode = `
 import type { Configuration } from "brisa";
 
 export default {
-  // bun, node, static, android, ios, desktop
+  // bun, node, deno, static, android, ios, desktop
   output: "android",
 } satisfies Configuration;
 `;
