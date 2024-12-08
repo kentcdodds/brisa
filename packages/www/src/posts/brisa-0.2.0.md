@@ -8,9 +8,11 @@ author_site: https://x.com/aralroca
 
 We’re thrilled to announce **Brisa 0.2.0**, a minor milestone in Brisa's journey. This release introduces **official support for Deno**, alongside multiple performance optimizations and important fixes. Let's dive into the highlights!
 
----
+<div align="center">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-OVJ7O4unVk" title="Brisa v0.2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
 
-## 🚀 Deno Support
+## 🦕 Deno Support
 
 Brisa now officially supports [**Deno**](/building-your-application/building/deno-server) as an output target. Here’s what’s new:
 
@@ -26,9 +28,7 @@ Brisa now officially supports [**Deno**](/building-your-application/building/den
 
 Brisa every time is more JS runtime agnostic, and we are excited to see how you will use it with Deno!
 
----
-
-## 🛠️ Key Fixes and Improvements
+## 🚀 Key Fixes and Improvements
 
 - **Performance Optimizations:** Client builds have been further optimized, enhancing build times and overall performance.
 
@@ -42,7 +42,24 @@ Brisa every time is more JS runtime agnostic, and we are excited to see how you 
   - Fixed `brisa start` to correctly load `brisa.config.ts` for all outputs.
   - Enhanced build consistency across output types.
 
----
+## 🛠️ Recap: Key Features from 0.1.x Releases
+
+### **Development Tools**
+- **PandaCSS Integration** (0.1.1): Seamlessly use PandaCSS within Brisa for robust styling options.
+- **Hot Reload Enhancements** (0.1.6, 0.1.7): Improved hot-reload for multi-save scenarios, making your development workflows faster and more reliable.
+- **`idleTimeout` Configuration** (0.1.2): Fine-tune connection handling with the `idleTimeout` property for more predictable server behavior.
+
+### **Routing & Middleware**
+- **Route Rewrite Support** (0.1.3): Dynamically rewrite routes with middleware, enabling flexible routing scenarios.
+- **Improved SPA Middleware** (0.1.3): Added support for transforming hard redirects into soft redirects in SPA navigation, streamlining client-side transitions.
+
+### **Server-Side Rendering**
+- **SSR Support for Web Components** (0.1.5): Extended support for `self` in Web Components during SSR, enabling advanced interactions with attributes, styles, and events at the server level.
+
+### **API Utilities**
+- **`getServer` API** (0.1.3): Access the Brisa server instance directly to extend its functionality or introspect runtime details.
+- **Streaming HTML from Async Generators** (0.1.2): Combine SQLite queries with async generators for streaming HTML content directly to the client, unlocking performance benefits for large datasets.
+
 
 ## What's Changed
 
@@ -59,9 +76,9 @@ Brisa every time is more JS runtime agnostic, and we are excited to see how you 
 - **fix(i18n)**: fix change locale from navigate – [@aralroca](https://github.com/aralroca) in [#669](https://github.com/brisa-build/brisa/pull/669)
 - **feat(deno)**: use `Deno.serve` – [@aralroca](https://github.com/aralroca) in [#659](https://github.com/brisa-build/brisa/pull/659)
 
----
-
 **Full Changelog**: [https://github.com/brisa-build/brisa/compare/0.1.7...0.2.0](https://github.com/brisa-build/brisa/compare/0.1.7...0.2.0)
+
+---
 
 [Visit our shop](https://brisadotbuild.myspreadshop.es/) to get your Brisa swag and show your support!
 
