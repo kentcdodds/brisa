@@ -3453,7 +3453,7 @@
   {
     "id": "/building-your-application/configuring/idle-timeout#types",
     "title": "Types",
-    "text": "export type Configuration = {\n  // ...\n  idleTimeout?: number;\n}; This idleTimeout is working in Bun and Node.js runtimes.",
+    "text": "export type Configuration = {\n  // ...\n  idleTimeout?: number;\n}; This idleTimeout is working in Bun, Deno and Node.js runtimes.",
     "titles": [
       "Idle Timeout"
     ]
