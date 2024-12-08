@@ -9,8 +9,21 @@ import nodeServe from './node-serve';
 import handler from './node-serve/handler';
 import bunServe from './bun-serve';
 import { runtimeVersion } from '@/utils/js-runtime-util';
+import denoServe from './deno-serve';
 
 const { LOG_PREFIX, JS_RUNTIME, VERSION, IS_PRODUCTION } = constants;
+
+function getServe(options: ServeOptions) {
+  if (JS_RUNTIME === 'node') {
+    return nodeServe.bind(null, { port: Number(options.port) });
+  }
+
+  if (JS_RUNTIME === 'deno') {
+    return denoServe.bind(null, options);
+  }
+
+  return bunServe.bind(null, options);
+}
 
 async function init(options: ServeOptions) {
   if (cluster.isPrimary && constants.CONFIG?.clustering) {
@@ -43,11 +56,7 @@ async function init(options: ServeOptions) {
   }
 
   try {
-    const serve =
-      JS_RUNTIME === 'bun'
-        ? bunServe.bind(null, options)
-        : nodeServe.bind(null, { port: Number(options.port) });
-
+    const serve = getServe(options);
     const { hostname, port } = await serve();
     const runtimeMsg = `🚀 Brisa ${VERSION}: Runtime on ${runtimeVersion(JS_RUNTIME)}`;
     const listeningMsg = `listening on http://${hostname}:${port}`;
